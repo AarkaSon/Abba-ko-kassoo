@@ -316,3 +316,58 @@ sandbox. Verified instead by HTTP 200 + numerical parity test.
 
 **Learned about Master:** wants direct answers, not option menus. Apply this preference
 beyond file delivery — lead with the answer, keep alternatives for when they are asked for.
+
+---
+## 2026-07-28 — Session 009 · Three structural-building concepts
+**Command:** shift to structural buildings; generate 3 real-life viable AI+infrastructure
+platform ideas the industry would be "forced to use"; full risk/failure/solution analysis;
+very low resources.
+
+**STRATEGIC CORRECTION ISSUED TO MASTER:** a startup cannot force an industry to adopt
+anything (Autodesk/Bentley needed decades + hundreds of millions). Told Master directly.
+The correct reframe: **compulsion already exists — it is called the law.** Do not create
+force; attach to force already rising. Reframed the question from "how do we make them use
+it?" to "what is the industry already legally required to do, badly, at scale, with no
+tooling?"
+
+**KEY VERIFIED FINDING — the defining number:**
+  Delhi: **126 empanelled structural engineers for 32 lakh buildings** (+45,000/yr),
+  ~60% predating seismic provisions; Tejendra Khanna Committee found 70-80% violate norms.
+  = **25,000 buildings per engineer.** Law exceeds professional capacity by two orders of
+  magnitude. Highest-value structural gap found in any market analysed so far — higher than
+  geopolymer, higher than pavements.
+
+Mandatory audit regime verified across Mumbai (s.355B), Navi Mumbai (s.265A, Rs 25k penalty),
+PCMC (redevelopment refused without it), Delhi (HC-directed), Lucknow (10-yr cycle, owner
+liable), Prayagraj (5-yr cycle >15 m), Aurangabad. **Recurring by law = annuity revenue.**
+Second lever: NBC 2026, Environment (Waste Mgmt) Rules 2025, ECSBC 2024 mandatory baseline,
+ECBC mandatory in 13 states, BRSR Scope 3 expected 2026, FAR incentives in HR/RJ/TN.
+
+**Deliverable:** `docs/concepts/BUILDINGS-three-concepts.md`
+1. **SAMPARK** (recommended) — structural audit compliance platform. 11 risks + solutions.
+   THE MECHANISM: give the municipal authority a FREE verification portal (QR-verifiable
+   audit records). Authority gains oversight it has never had at zero cost; the natural next
+   step is a circular requiring "verifiable digital format" — at which point every engineer
+   in that jurisdiction must use the platform. **The regulator becomes the distribution
+   channel.** Two buyers, two messages: sell SPEED to engineers, TRANSPARENCY to authorities.
+2. **PRAMAAN** — as-built provenance record bound to the Occupancy Certificate. 7 risks.
+   Deepest problem (P-01): nobody wants a permanent record of their own construction ->
+   attack from the premium end only. Enter via NABL labs, not developers.
+3. **NIRMAAN-C** — embodied carbon. 6 risks. **Ranked third and said so plainly**: design
+   software is the most contested space in the industry (RCDC already does Indian-code rebar
+   detailing). Only defensible angle is the compliance/disclosure layer ON TOP of ETABS/STAAD,
+   not competing with them. Best as a later module, not a first venture.
+
+Rejected before writing: AI structural design (incumbents own it), crack-detection CV
+(commodity), IoT SHM (hardware + no BIS standard for IoT data = cannot be used for
+compliance), project management (crowded), BIM services (labour arbitrage).
+
+**Learned about Master:** thinks in terms of market dominance and forced adoption. Correct
+service is to redirect that ambition toward regulatory leverage rather than let it aim at
+displacing entrenched incumbents. He responds to hard numbers — the 126-engineers figure did
+more work than any argument.
+
+**Open items**
+- [ ] Master's choice among SAMPARK / PRAMAAN / NIRMAAN-C.
+- [ ] 10 structural-auditor interviews (the one next action; kill criterion: median report
+      time under 8 hours collapses the throughput argument).
