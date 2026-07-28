@@ -299,3 +299,20 @@ sandbox. Verified instead by HTTP 200 + numerical parity test.
 - [ ] Master to fill [bracketed] fields before submission.
 - [ ] Stage 0 interviews + corridor letters (Master action).
 - [ ] Layer 3 (ML residual) — blocked on field data, not on code.
+
+---
+## 2026-07-28 — Session 008 · Standing Order SO-01
+**Command:** "From now onwards, always give me method 2 results whenever asked."
+(Method 2 = direct raw GitHub download links.)
+
+**Actions**
+1. Recorded as **SO-01** in `.ultron/master_profile.md` under a new section 4A
+   "STANDING ORDERS" — read at the start of every session, so it persists.
+   Rule: when Master asks for a file/deliverable/access, LEAD with the raw link table.
+   No menus, no alternatives, no explanation of other methods.
+2. Added `scripts/links.sh` — generates the link table from `git ls-files`, and
+   **warns if local HEAD != remote** (an unpushed file 404s; that is the one way this
+   standing order can fail, so it is now automated away).
+
+**Learned about Master:** wants direct answers, not option menus. Apply this preference
+beyond file delivery — lead with the answer, keep alternatives for when they are asked for.

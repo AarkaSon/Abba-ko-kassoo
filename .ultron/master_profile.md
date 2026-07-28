@@ -34,6 +34,23 @@
   free/open tooling, cloud-free workflows. No heavyweight installs without asking.
 - Sandbox has: Python 3.11, pip, git, gh. No Abaqus, no MATLAB.
 
+## 4A. STANDING ORDERS (issued directly by Master — never deviate)
+
+### SO-01 · File delivery = ALWAYS raw GitHub links (issued 2026-07-28)
+Whenever Master asks for a file, a deliverable, or how to access/download something,
+**give the direct GitHub raw download link immediately.** Do not offer a menu of methods,
+do not explain the viewer, do not describe cloning. Just the link(s), in a table.
+
+Link pattern:
+```
+https://github.com/AarkaSon/Abba-ko-kassoo/raw/arena/019fa790-abba-ko-kassoo/<path>
+```
+- `/raw/` (not `/blob/`) so the browser downloads instead of previewing.
+- Branch segment is `arena/019fa790-abba-ko-kassoo` — files are NOT on `main`.
+- **Precondition: the file must be committed AND pushed before the link is given.**
+  A link to an unpushed file 404s. Always `git push` first, then hand over the link.
+- Still call `present_file` for the primary deliverable, but lead the reply with the link.
+
 ## 5. Standing Operating Rules
 - Keep generated artifacts / large data out of Git (see `.gitignore`); reference externally.
 - All work on branch `arena/019fa790-abba-ko-kassoo`.
