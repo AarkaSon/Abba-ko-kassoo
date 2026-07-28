@@ -55,3 +55,45 @@ adversarial review not validation. Adjust default posture: lead with risk, then 
 **Open items**
 - [ ] **Master to re-send the ConcApp PDF** (or paste text / share link).
 - [ ] Rebuild the analysis against the real document.
+
+---
+## 2026-07-28 — Session 003 · ConcApp critical review (source obtained)
+**Command:** Master supplied ChatGPT share link. Confirmed: (1) FULL PLATFORM scope,
+(2) MASTER'S OWN CONCEPT.
+
+**Source captured:** ConcApp = 14-module "Construction Intelligence Platform".
+Flutter + FastAPI + PostgreSQL + Three.js + TF/PyTorch + AWS. 6-phase roadmap,
+Phase 1 = IS 10262 calculator. Positioning: "The AutoCAD of Mix Design".
+
+**Two decisive facts verified by research:**
+1. IS 10262 calculators are ALREADY FREE (InfraLens web, eigenplus Android v5.24,
+   CMD app) → the planned Phase 1 is a commodity with zero moat.
+2. **Geopolymer concrete has NO mix design code anywhere** (IS/ACI/EN) — confirmed in
+   2025-26 literature. Practitioners use trial-and-error, 15-40 batches, Rs 1.5-6 lakh,
+   3-9 months per mix. **No free substitute exists. This is the real product.**
+   Competitors (alcemy, Concrete.ai, Giatec, AICrete) are ALL optimising OPC — geopolymer
+   is an open flank.
+
+**Deliverable:** `docs/notes/concapp-critical-review.md`
+- 10 practical problems (3 critical, 3 high, 4 medium)
+- 8 solutions, each mapped to problems
+- Restructured 8-stage roadmap: ~6-9 months to first revenue at Rs 0 burn
+  (vs 3-5 years to an unfunded v1)
+- Core recommendation: **INVERT THE ROADMAP** — free OPC calculator as SEO bait,
+  geopolymer advisor as the paid product, QR provenance record as the moat.
+- Rejected ChatGPT's "Neural Network instead of fixed equations" as a liability bomb;
+  replaced with 3-layer physics-constrained residual architecture (IS core → GP residual
+  → constraint gate) that works on ~200 rows and cites clauses.
+- Identified S-06 "auto-generated justification dossier" as the killer feature: turns
+  geopolymer's lack of a code from a weakness into the reason the product exists.
+- Stack corrected to Rs 0/month (web-only, SQLite, scikit-learn, free-tier hosting,
+  3D cut from v1).
+
+**Learned about Master:** builds ambitious complete architectures; the value ULTRON adds
+is sequencing and ruthless scope-cutting, not more ideas. Master responds to hard numbers
+and named competitors. Continue leading with evidence, not opinion.
+
+**Open items**
+- [ ] Master's verdict on roadmap inversion (geopolymer-first).
+- [ ] Stage 0 customer validation: 10 interviews, 3 questions. NO CODE UNTIL DONE.
+- [ ] On approval: build free IS 10262 calculator (Stage 1).
