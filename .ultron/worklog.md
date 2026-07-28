@@ -145,3 +145,54 @@ ULTRON's own earlier recommendations when evidence contradicts them.
 **Open items**
 - [ ] Master's go/no-go on Stage 0 + 0.5 in parallel.
 - [ ] On command: draft interview script, BIS reproduction letter, incorporation/ToS checklist.
+
+---
+## 2026-07-28 — Session 005 · Stage 0 pack + new concept (SETU)
+**Commands:** (1) proceed with Stage 0 drafts; (2) originate a new, practically feasible
+AI + infrastructure/pavement concept specific to concrete, extensible to a business model.
+
+**Delivered — Stage 0 pack:**
+- `docs/stage0/01_interview_script.md` — 25-question validation script, 4 segments,
+  scoring sheet, kill thresholds. Q13/Q14 double as seed collection for the regional
+  cost engine (finding §0.1).
+- `docs/stage0/02_bis_permission_letter.md` — ready-to-send BIS letter + fallback
+  architecture (fitted functions instead of tables; legal constraint yields a BETTER
+  product since smooth derivatives are what the Stage 5 optimiser needs). IRC + trademark
+  actions batched (long lead times).
+- `docs/stage0/03_legal_shield_checklist.md` — OPC incorporation, DPDP data-minimisation
+  schema rules, 7 ToS liability clauses, insurance, IP. Rs ~12k to be legally safe
+  through Stage 3.
+- `docs/stage0/FINDINGS.md` — tracker + decision table.
+
+**Delivered — new concept: SETU (Concrete Pavement Intelligence)**
+`docs/concepts/SETU-concept.md`. Segment-level risk & residual-life engine for rigid
+pavements. Three products from one engine: (A) reliability-based thickness design,
+(B) as-built digital twin from existing pour/cube paperwork, (C) predictive maintenance
+ranking with cost-of-waiting attached.
+
+Core insight: a slab is designed once from assumptions and never checked against reality
+until it cracks; the industry compensates with a blanket safety factor -> concrete wasted
+where conditions are good, early failure where they are bad. Nobody can answer "which
+200 m will fail first, and what will it cost me?"
+
+Why SETU beats ConcApp on business fundamentals:
+- Data already exists and is legally mandated (no cold start)
+- LOW liability (ranks maintenance priorities; does not specify a structural material)
+- IRC:58 already supplies the fatigue/erosion damage framework (code-backed, unlike GPC)
+- No incumbent at network asset level (all four competitors are materials/plant-side)
+- Zero hardware, zero capital
+- Buyer holds a committed recurring maintenance budget; ROI is self-evident
+  ("Rs 2.8 L now vs Rs 19 L later")
+- **`src/design/westergaard.py` is already written and verified — Stage 1 is ~2 weeks away**
+- Exact fit to Master's thesis (geopolymer rigid pavement slabs)
+
+Main weakness (stated honestly): long public-sector sales cycles; as-built data is
+politically sensitive. Mitigations documented.
+
+**Recommendation given:** validate both in Stage 0 (different call lists, cheap to add);
+build the shared spine first (codal engine + physics-constrained ML + provenance layer
+serve both); let the interviews decide. If forced to name one: **SETU**.
+
+**Open items**
+- [ ] Master's judgement on SETU.
+- [ ] Execute Stage 0 interviews + admin actions.
