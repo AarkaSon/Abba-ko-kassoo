@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rigid Pavement Slab Thickness Calculator (IRC:58 Framework) | SETU</title>
+<meta name="description" content="Free reliability-based rigid pavement slab thickness calculator. Westergaard edge stress, Bradbury thermal warping, IRC:58 cumulative fatigue damage, BUC and TDC checks. Works offline on mobile.">
+<meta name="keywords" content="IRC 58 calculator, rigid pavement design, concrete pavement thickness, cumulative fatigue damage, Westergaard stress, warping stress, radius of relative stiffness">
+<link rel="canonical" href="https://example.org/">
+<meta property="og:title" content="Rigid Pavement Slab Thickness Calculator — IRC:58 Framework">
+<meta property="og:description" content="Free, no login. Reliability-based concrete pavement thickness with full calculation trace.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication",
+"name":"SETU Rigid Pavement Thickness Calculator",
+"applicationCategory":"EngineeringApplication","operatingSystem":"Web",
+"offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},
+"description":"Reliability-based rigid pavement slab thickness calculator implementing the IRC:58 cumulative fatigue damage framework with Westergaard stresses and Bradbury thermal warping."}
+</script>
+<style>
+:root{
+  --navy:#1f3b5c; --navy-l:#2d5581; --bg:#f7f9fc; --card:#fff;
+  --line:#dfe6ef; --ink:#16202b; --muted:#5d6b7a;
+  --ok:#0f7b4f; --warn:#b8860b; --bad:#b3261e; --accent:#e8f0f9;
+}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+     background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:22px 16px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header h1{margin:0 0 4px;font-size:1.45rem;letter-spacing:.2px}
+header p{margin:0;opacity:.85;font-size:.9rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;
+      box-shadow:0 1px 2px rgba(16,32,48,.04)}
+.card h2{margin:0 0 12px;font-size:1.02rem;color:var(--navy);
+         border-bottom:2px solid var(--accent);padding-bottom:7px}
+.card h3{margin:16px 0 8px;font-size:.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+label{display:block;margin:9px 0 3px;font-size:.86rem;font-weight:600}
+.hint{font-weight:400;color:var(--muted);font-size:.78rem}
+input,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;
+             font-size:.95rem;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--navy-l);outline-offset:-1px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{width:100%;margin-top:16px;padding:12px;background:var(--navy);color:#fff;border:0;
+       border-radius:7px;font-size:1rem;font-weight:600;cursor:pointer}
+button:hover{background:var(--navy-l)}
+button.sec{background:#fff;color:var(--navy);border:1px solid var(--navy);margin-top:8px}
+.big{text-align:center;padding:16px;background:var(--accent);border-radius:8px;margin-bottom:12px}
+.big .v{font-size:2.5rem;font-weight:700;color:var(--navy);line-height:1.1}
+.big .l{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin:8px 0}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.4px}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 9px;border-radius:11px;font-size:.75rem;font-weight:700}
+.p-ok{background:#e3f3ec;color:var(--ok)}.p-warn{background:#fdf3dd;color:var(--warn)}
+.p-bad{background:#fbe6e4;color:var(--bad)}
+.trace{background:#fbfcfe;border:1px solid var(--line);border-radius:7px;padding:12px;
+       font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.79rem;
+       white-space:pre-wrap;max-height:400px;overflow:auto;color:#243447}
+details{margin-top:12px}summary{cursor:pointer;font-weight:600;color:var(--navy);font-size:.9rem}
+.note{font-size:.8rem;color:var(--muted);margin-top:10px;padding:10px;background:#fbfcfe;
+      border-left:3px solid var(--navy);border-radius:0 5px 5px 0}
+footer{background:var(--navy);color:#cfdbe8;padding:22px 16px;margin-top:26px;font-size:.82rem}
+footer a{color:#fff}
+.disc{background:#fffdf5;border:1px solid #e8d9a8;border-radius:8px;padding:12px;margin:16px 0;font-size:.84rem}
+.disc b{color:#8a6d1f}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Rigid Pavement Slab Thickness Calculator</h1>
+  <p>Reliability-based analysis using the IRC:58 cumulative fatigue damage framework — free, no login, works offline</p>
+</div></header>
+
+<div class="wrap">
+
+<div class="disc">
+  <b>Decision-support tool.</b> Output is advisory and must be independently verified and
+  approved by a qualified licensed engineer before any construction use. Design parameters
+  reference Indian Standards and IRC publications; users must consult the current editions.
+  Copyright in those documents vests in BIS and IRC respectively — this tool implements the
+  computational procedure only and reproduces no protected text or tables.
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>Input Parameters</h2>
+
+    <h3>Slab &amp; Foundation</h3>
+    <label>Trial slab thickness, h <span class="hint">(mm)</span>
+      <input type="number" id="h" value="300" step="10" min="100" max="600"></label>
+    <div class="row">
+      <label>Elastic modulus, E <span class="hint">(MPa)</span>
+        <input type="number" id="E" value="30000" step="1000"></label>
+      <label>Poisson's ratio, μ
+        <input type="number" id="mu" value="0.15" step="0.01" min="0" max="0.49"></label>
+    </div>
+    <div class="row">
+      <label>Subgrade reaction, k <span class="hint">(MPa/mm)</span>
+        <input type="number" id="k" value="0.08" step="0.005" min="0.01"></label>
+      <label>Flexural strength, MR <span class="hint">(MPa)</span>
+        <input type="number" id="mr" value="4.5" step="0.1" min="1"></label>
+    </div>
+
+    <h3>Geometry</h3>
+    <div class="row">
+      <label>Joint spacing, L <span class="hint">(mm)</span>
+        <input type="number" id="L" value="4500" step="100"></label>
+      <label>Lane width, W <span class="hint">(mm)</span>
+        <input type="number" id="W" value="3500" step="100"></label>
+    </div>
+
+    <h3>Loading</h3>
+    <div class="row">
+      <label>Design axle load <span class="hint">(tonnes)</span>
+        <input type="number" id="axle" value="15" step="0.5" min="1"></label>
+      <label>Tyre pressure <span class="hint">(MPa)</span>
+        <input type="number" id="p" value="0.8" step="0.05" min="0.3"></label>
+    </div>
+    <label>Design repetitions of this axle group
+      <input type="number" id="reps" value="500000" step="10000" min="1"></label>
+
+    <h3>Temperature Differential <span class="hint">— read from IRC:58 for your region &amp; thickness</span></h3>
+    <div class="row">
+      <label>Daytime ΔT <span class="hint">(°C)</span>
+        <input type="number" id="dTd" value="16.8" step="0.1" min="0"></label>
+      <label>Night ΔT <span class="hint">(°C)</span>
+        <input type="number" id="dTn" value="8.4" step="0.1" min="0"></label>
+    </div>
+    <label>Coefficient of thermal expansion, α <span class="hint">(×10⁻⁶ /°C)</span>
+      <input type="number" id="alpha" value="10" step="0.5" min="5" max="15"></label>
+
+    <button onclick="run()">Calculate</button>
+    <button class="sec" onclick="solve()">Find minimum thickness (CFD ≤ 1)</button>
+  </div>
+
+  <div class="card">
+    <h2>Results</h2>
+    <div id="out"><p style="color:var(--muted)">Enter parameters and press Calculate.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Calculation Trace</h2>
+  <p class="hint" style="margin:0 0 8px">Every step, with the governing reference. An engineer
+  who cannot check a number will not stake a seal on it.</p>
+  <div class="trace" id="trace">—</div>
+  <button class="sec" onclick="copyTrace()">Copy trace</button>
+</div>
+
+<div class="card">
+  <h2>Method</h2>
+  <details open><summary>What this calculator does</summary>
+    <p style="font-size:.9rem">It computes the flexural stress in a concrete pavement slab
+    under the combined action of axle loading and temperature warping, expresses that stress
+    as a ratio of the modulus of rupture, determines the allowable number of load repetitions
+    from the fatigue relationship, and reports the cumulative fatigue damage.</p>
+    <p style="font-size:.9rem"><b>Both cracking mechanisms are checked.</b> Bottom-up cracking
+    (BUC) combines the daytime positive temperature differential with the load stress at the
+    slab edge. Top-down cracking (TDC) combines the night-time reversed differential with an
+    axle placed near the transverse joint. The governing mechanism is the one producing the
+    higher stress ratio.</p>
+  </details>
+  <details><summary>Why thermal warping must not be omitted</summary>
+    <p style="font-size:.9rem">A load-only analysis can understate the stress ratio by 40 per
+    cent or more for typical Indian slab geometry and temperature differentials. Because the
+    fatigue relationship is steeply non-linear in the stress ratio, that understatement
+    translates into an order-of-magnitude error in the allowable repetitions. Warping is not
+    a refinement; it frequently governs.</p>
+  </details>
+  <details><summary>References</summary>
+    <ul style="font-size:.85rem">
+      <li>IRC:58 — Guidelines for the Design of Plain Jointed Rigid Pavements for Highways</li>
+      <li>Westergaard, H.M. (1926) — Stresses in concrete pavements computed by theoretical analysis</li>
+      <li>Ioannides, Thompson &amp; Barenberg (1985) — Westergaard solutions reconsidered</li>
+      <li>Bradbury, R.D. (1938) — Reinforced Concrete Pavements (warping coefficient)</li>
+      <li>Miner, M.A. (1945) — Cumulative damage in fatigue</li>
+      <li>Portland Cement Association (1984) — Thickness Design for Concrete Highway and Street Pavements</li>
+    </ul>
+  </details>
+  <div class="note"><b>Bradbury coefficient.</b> The warping coefficient C is evaluated from a
+  continuous fitted function (maximum deviation 0.023 from the published curve over
+  1 ≤ L/l ≤ 14) rather than a tabulated lookup. The fit is original work; it is also
+  differentiable, which matters for optimisation.</div>
+</div>
+
+</div>
+
+<footer><div class="wrap">
+  <p><b>SETU</b> — Structural Evaluation and Thickness Underwriting. Free engineering
+  computation tool. No account required; no personal data collected; all computation runs
+  in your browser.</p>
+  <p>Advisory output only — not a substitute for design by a qualified engineer.</p>
+</div></footer>
+
+<script>
+/* ---------- Engine: a faithful JS port of src/pavement/*.py ---------- */
+const EULER = 0.5772156649;
+
+function radiusRelStiffness(E,h,mu,k){ return Math.pow(E*h*h*h/(12*(1-mu*mu)*k),0.25); }
+
+function equivRadius(a,h){ return a < 1.724*h ? Math.sqrt(1.6*a*a+h*h)-0.675*h : a; }
+
+function stressEdge(E,h,mu,k,P,a){
+  const l = radiusRelStiffness(E,h,mu,k);
+  const t = Math.log(E*Math.pow(h,3)/(100*k*Math.pow(a,4)))
+          + 1.84 - 4*mu/3 + (1-mu)/2 + 1.18*(1+2*mu)*a/l;
+  return 3*P*(1+mu)/(Math.PI*(3+mu)*h*h)*t;
+}
+
+function bradburyC(L,l){
+  if(l<=0||L<=0) return 0;
+  const x=L/l;
+  return Math.max(0, 1.26*(1-Math.exp(-Math.pow(x/5.05,3.3)))*Math.exp(-0.018*x));
+}
+
+function warpEdge(E,alpha,dT,C){ return C*E*alpha*Math.abs(dT)/2; }
+
+function allowableN(sr){
+  if(sr<0.45) return Infinity;
+  if(sr<=0.55){ const d=sr-0.4325; return d<=0?Infinity:Math.pow(4.2577/d,3.268); }
+  const e=(0.9718-sr)/0.0828;
+  return e<-30?0:Math.pow(10,e);
+}
+
+function analyse(v){
+  const a = Math.sqrt((v.axle*1000*9.81/2)/(Math.PI*v.p));  // wheel = half axle
+  const P = v.axle*1000*9.81/2;
+  const l = radiusRelStiffness(v.E,v.h,v.mu,v.k);
+  const b = equivRadius(a,v.h);
+  const sLoad = stressEdge(v.E,v.h,v.mu,v.k,P,a);
+  const Cl = bradburyC(v.L,l), Cw = bradburyC(v.W,l), Cg = Math.max(Cl,Cw);
+  const wDay = warpEdge(v.E,v.alpha,v.dTd,Cg);
+  const wNit = warpEdge(v.E,v.alpha,v.dTn,Cg);
+  const sBUC = sLoad + wDay;
+  const sTDC = 0.66*sLoad + wNit;
+  const srBUC = sBUC/v.mr, srTDC = sTDC/v.mr, srLoad = sLoad/v.mr;
+  const gov = srBUC>=srTDC ? "BUC" : "TDC";
+  const srG = Math.max(srBUC,srTDC), sG = Math.max(sBUC,sTDC);
+  const N = allowableN(srG);
+  const cfd = isFinite(N) ? v.reps/N : 0;
+  return {a,P,l,b,sLoad,srLoad,Cl,Cw,Cg,wDay,wNit,sBUC,sTDC,srBUC,srTDC,gov,srG,sG,N,cfd};
+}
+
+function num(id){ return parseFloat(document.getElementById(id).value); }
+function vals(){ return {
+  h:num('h'),E:num('E'),mu:num('mu'),k:num('k'),mr:num('mr'),
+  L:num('L'),W:num('W'),axle:num('axle'),p:num('p'),reps:num('reps'),
+  dTd:num('dTd'),dTn:num('dTn'),alpha:num('alpha')*1e-6 }; }
+
+function f(x,d){ return isFinite(x)? x.toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d}) : '∞'; }
+function sci(x){ return isFinite(x)? x.toExponential(3) : 'unlimited'; }
+
+function run(){
+  const v = vals();
+  if(!(v.h>0&&v.E>0&&v.k>0&&v.mr>0)){ alert('Check inputs: h, E, k and MR must be positive.'); return; }
+  const r = analyse(v);
+  const pass = r.cfd<=1.0;
+  const cls = pass ? (r.cfd<0.6?'p-ok':'p-warn') : 'p-bad';
+  const und = 100*(1 - r.srLoad/r.srG);
+
+  document.getElementById('out').innerHTML = `
+    <div class="big">
+      <div class="v">${f(r.cfd,3)}</div>
+      <div class="l">Cumulative Fatigue Damage</div>
+      <div style="margin-top:8px"><span class="pill ${cls}">${pass?'CFD ≤ 1 — ACCEPTABLE':'CFD > 1 — NOT ACCEPTABLE'}</span></div>
+    </div>
+    <table>
+      <tr><th>Quantity</th><th style="text-align:right">Value</th></tr>
+      <tr><td>Radius of relative stiffness, l</td><td class="n">${f(r.l,1)} mm</td></tr>
+      <tr><td>Contact radius, a</td><td class="n">${f(r.a,1)} mm</td></tr>
+      <tr><td>Load-only edge stress</td><td class="n">${f(r.sLoad,3)} MPa</td></tr>
+      <tr><td>Bradbury C (governing)</td><td class="n">${f(r.Cg,3)}</td></tr>
+      <tr><td>Warping stress (day / night)</td><td class="n">${f(r.wDay,3)} / ${f(r.wNit,3)} MPa</td></tr>
+    </table>
+    <h3>Cracking mechanisms</h3>
+    <table>
+      <tr><th>Mechanism</th><th style="text-align:right">Stress</th><th style="text-align:right">SR</th><th style="text-align:right">N allowable</th></tr>
+      <tr${r.gov==='BUC'?' style="font-weight:700;background:var(--accent)"':''}>
+        <td>Bottom-up (BUC)</td><td class="n">${f(r.sBUC,3)}</td><td class="n">${f(r.srBUC,3)}</td><td class="n">${sci(allowableN(r.srBUC))}</td></tr>
+      <tr${r.gov==='TDC'?' style="font-weight:700;background:var(--accent)"':''}>
+        <td>Top-down (TDC)</td><td class="n">${f(r.sTDC,3)}</td><td class="n">${f(r.srTDC,3)}</td><td class="n">${sci(allowableN(r.srTDC))}</td></tr>
+    </table>
+    <div class="note"><b>${r.gov} governs.</b> A load-only analysis would give SR = ${f(r.srLoad,3)},
+    understating the governing stress ratio by ${f(und,0)} per cent.</div>`;
+
+  document.getElementById('trace').textContent = trace(v,r);
+}
+
+function trace(v,r){
+  return `RIGID PAVEMENT SLAB — CALCULATION TRACE
+${'='.repeat(64)}
+INPUT
+  Slab thickness h .................. ${f(v.h,0)} mm
+  Elastic modulus E ................. ${f(v.E,0)} MPa
+  Poisson's ratio mu ................ ${v.mu}
+  Modulus of subgrade reaction k .... ${v.k} MPa/mm
+  Modulus of rupture MR ............. ${f(v.mr,2)} MPa
+  Joint spacing L ................... ${f(v.L,0)} mm
+  Lane width W ...................... ${f(v.W,0)} mm
+  Axle load ......................... ${f(v.axle,1)} t
+  Tyre pressure ..................... ${v.p} MPa
+  Repetitions ....................... ${f(v.reps,0)}
+  Temp differential day / night ..... ${v.dTd} / ${v.dTn} degC
+  Thermal expansion alpha ........... ${(v.alpha*1e6).toFixed(1)}e-6 /degC
+
+STEP 1 — RADIUS OF RELATIVE STIFFNESS            [Westergaard; IRC:58]
+  l = [E h^3 / (12 (1-mu^2) k)]^0.25
+    = [${f(v.E,0)} x ${f(v.h,0)}^3 / (12 x (1-${v.mu}^2) x ${v.k})]^0.25
+  l = ${f(r.l,2)} mm
+
+STEP 2 — WHEEL LOAD AND CONTACT AREA
+  Wheel load P = axle/2 = ${f(v.axle,1)}/2 t = ${f(r.P/1000,2)} kN
+  a = sqrt(P / (pi x p)) = ${f(r.a,2)} mm
+  Equivalent radius b = ${f(r.b,2)} mm
+
+STEP 3 — LOAD-INDUCED EDGE STRESS                [Westergaard, edge case]
+  sigma_load = ${f(r.sLoad,4)} MPa
+  Stress ratio (load only) = ${f(r.srLoad,4)}
+
+STEP 4 — THERMAL WARPING                         [Bradbury 1938; IRC:58]
+  L/l = ${f(v.L/r.l,2)}  ->  C_length = ${f(r.Cl,4)}
+  W/l = ${f(v.W/r.l,2)}  ->  C_width  = ${f(r.Cw,4)}
+  Governing C = ${f(r.Cg,4)}
+  sigma_warp = C E alpha dT / 2
+    day   = ${f(r.Cg,4)} x ${f(v.E,0)} x ${(v.alpha*1e6).toFixed(1)}e-6 x ${v.dTd} / 2 = ${f(r.wDay,4)} MPa
+    night = ${f(r.wNit,4)} MPa
+
+STEP 5 — COMBINED STRESS, BOTH MECHANISMS        [IRC:58]
+  BUC = sigma_load + sigma_warp,day
+      = ${f(r.sLoad,4)} + ${f(r.wDay,4)} = ${f(r.sBUC,4)} MPa   SR = ${f(r.srBUC,4)}
+  TDC = 0.66 sigma_load + sigma_warp,night
+      = ${f(0.66*r.sLoad,4)} + ${f(r.wNit,4)} = ${f(r.sTDC,4)} MPa   SR = ${f(r.srTDC,4)}
+  GOVERNING: ${r.gov}   SR = ${f(r.srG,4)}
+
+STEP 6 — ALLOWABLE REPETITIONS                   [PCA; IRC:58]
+  SR < 0.45           -> unlimited (endurance limit)
+  0.45 <= SR <= 0.55  -> N = [4.2577/(SR-0.4325)]^3.268
+  SR > 0.55           -> log10 N = (0.9718-SR)/0.0828
+  With SR = ${f(r.srG,4)}:  N = ${sci(r.N)}
+
+STEP 7 — CUMULATIVE FATIGUE DAMAGE               [Miner 1945; IRC:58]
+  CFD = n / N = ${f(v.reps,0)} / ${sci(r.N)} = ${f(r.cfd,4)}
+  Acceptance: CFD <= 1.0  ->  ${r.cfd<=1?'SATISFIED':'NOT SATISFIED'}
+${'='.repeat(64)}
+NOTE: Advisory output. Verify against the current editions of IRC:58 and IS 456,
+and obtain approval from a qualified licensed engineer before construction use.`;
+}
+
+function solve(){
+  const v = vals();
+  let lo=100, hi=800, best=null;
+  for(let i=0;i<60;i++){
+    const mid=(lo+hi)/2;
+    const r=analyse({...v,h:mid});
+    if(r.cfd<=1.0){ hi=mid; best=mid; } else { lo=mid; }
+  }
+  if(best===null){ alert('No thickness up to 800 mm satisfies CFD ≤ 1 for these inputs. Reduce loading, increase MR, or shorten joint spacing.'); return; }
+  const h=Math.ceil(best/10)*10;
+  document.getElementById('h').value=h;
+  run();
+  document.getElementById('out').insertAdjacentHTML('afterbegin',
+    `<div class="note" style="border-color:var(--ok)"><b>Minimum thickness found: ${h} mm</b>
+     — smallest 10 mm increment satisfying CFD ≤ 1 with thermal warping included.</div>`);
+}
+
+function copyTrace(){
+  navigator.clipboard.writeText(document.getElementById('trace').textContent)
+    .then(()=>alert('Calculation trace copied.'))
+    .catch(()=>alert('Copy failed — select the text manually.'));
+}
+
+document.querySelectorAll('input').forEach(el=>{
+  el.addEventListener('keydown',e=>{ if(e.key==='Enter') run(); });
+});
+run();
+</script>
+</body>
+</html>

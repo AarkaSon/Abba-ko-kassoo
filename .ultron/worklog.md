@@ -246,3 +246,56 @@ supervisors respond better to honesty about translational intent.
 - [ ] Master to fill [bracketed] fields (name, institution, supervisor) before submission.
 - [ ] Layer 3 (ML residual) and Layer 4 (decision engine) — pending field data.
 - [ ] Stage 0 interviews still outstanding.
+
+---
+## 2026-07-28 — Session 007 · "Execute all" — (a)(b)(c)(d)(e) delivered
+**Command:** execute all five outstanding options.
+
+**(b) Layer 1 extension — thermal warping & dual cracking** `src/pavement/thermal.py`
+- Bradbury warping coefficient, edge + interior warping stress, BUC and TDC checks.
+- **ERROR CAUGHT AND CORRECTED:** first fit deviated from the published Bradbury curve by
+  0.308 while the docstring claimed +/-0.03 — a false accuracy claim. Re-fitted by
+  grid search to C = 1.26(1-exp(-(x/5.05)^3.3))exp(-0.018x), **max error 0.0226**, and
+  pinned by `test_bradbury_fit_accuracy` so the claim can never silently drift again.
+- **MAJOR FINDING:** omitting warping understates the stress ratio by ~43% (SR 0.457 ->
+  0.806 for a 300 mm slab). Since the fatigue law is steeply non-linear in SR, this is an
+  orders-of-magnitude error in allowable repetitions. Session 006's load-only engine was
+  materially unconservative; this closes that gap.
+- Wired into reliability.py via optional `ThermalConfig`. With thermal on, required
+  thickness rises 285->485 (k=0.20) and 320->400 mm (k=0.045). Note the INVERSION:
+  stiffer subgrade now needs MORE thickness, because higher k -> smaller l -> higher
+  L/l -> greater curling restraint. Load and warping pull in opposite directions.
+
+**(c) Free public calculator** `web/index.html`
+- Single file, no framework, no build step, no server, works offline, no login.
+- Full step-by-step calculation trace with clause references (adoption mechanism U-03).
+- JS engine is a port of the Python modules; **`tests/test_js_parity.py` verifies
+  agreement to 3.4e-15** across 5 cases via Node. A silently diverging port would publish
+  wrong engineering numbers under our name; that risk is now test-guarded.
+- Tests also enforce the advisory disclaimer and the no-personal-data posture (DPDP).
+
+**(a) Corridor data request pack** `docs/stage0/04_corridor_data_request.md`
+- Governing principle: NEVER frame as an audit; frame as forward-looking asset management.
+- Route A concessionaire letter (recommended first — private, commercial, direct stake),
+  Route B PWD, Route C consultant, **Route D institutional fallback requiring no
+  permission at all** (LTPP public database, past theses). Strategic advice: validate the
+  method on free LTPP data first, then use the working demonstration to open Indian doors.
+
+**(d) Supervisor deck** `results/SETU_Supervisor_Deck.pptx` — 11 slides, figures computed
+live from the engine so the deck cannot drift from the code.
+
+**(e) PDF** `results/SETU_Research_Proposal.pdf` — 12 pages. No LibreOffice in sandbox, so
+rendered NATIVELY with ReportLab rather than converted; better fidelity and reproducible.
+
+**Also:** .docx regenerated with live figures + new section 8.2 on thermal significance;
+test count corrected 31 -> 56 throughout.
+
+**Blocked:** browser screenshot of the calculator — Playwright chromium download blocked in
+sandbox. Verified instead by HTTP 200 + numerical parity test.
+
+**56/56 tests passing.**
+
+**Open items**
+- [ ] Master to fill [bracketed] fields before submission.
+- [ ] Stage 0 interviews + corridor letters (Master action).
+- [ ] Layer 3 (ML residual) — blocked on field data, not on code.

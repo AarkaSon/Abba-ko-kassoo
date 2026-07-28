@@ -35,9 +35,11 @@ from .damage import (
     AxleLoadGroup,
     cumulative_fatigue_damage,
 )
+from .thermal import check_both_mechanisms
 
 __all__ = [
     "Uncertain",
+    "ThermalConfig",
     "PavementUncertainty",
     "ReliabilityResult",
     "monte_carlo_damage",
@@ -81,6 +83,33 @@ class Uncertain:
         sigma_ln = math.sqrt(math.log(1.0 + self.cov ** 2))
         mu_ln = math.log(self.mean) - 0.5 * sigma_ln ** 2
         return math.exp(rng.gauss(mu_ln, sigma_ln))
+
+
+@dataclass(frozen=True)
+class ThermalConfig:
+    """
+    Optional thermal warping configuration.
+
+    When supplied to the reliability analysis, the governing cracking mechanism
+    (BUC or TDC per IRC:58) is evaluated for every Monte Carlo realisation and the
+    resulting combined stress replaces the load-only stress. Omitting this is
+    equivalent to a load-only analysis, which materially UNDER-states damage
+    (see src/pavement/thermal.py and tests/test_thermal.py).
+
+    delta_T_day    : daytime top-bottom differential [degC] — from IRC:58 by region
+                     and slab thickness; supplied by the user, not embedded here.
+    delta_T_night  : night-time differential magnitude [degC]
+    slab_length_mm : transverse joint spacing
+    slab_width_mm  : lane width / longitudinal joint spacing
+    alpha          : coefficient of thermal expansion [1/degC]
+    """
+
+    delta_T_day: float
+    delta_T_night: float
+    slab_length_mm: float = 4500.0
+    slab_width_mm: float = 3500.0
+    alpha: float = 10.0e-6
+    axle_factor_tdc: float = 0.66
 
 
 @dataclass(frozen=True)
@@ -156,6 +185,7 @@ def monte_carlo_damage(
     n_sim: int = 5000,
     seed: int | None = 42,
     tyre_pressure: float = 0.8,
+    thermal: "ThermalConfig | None" = None,
 ) -> ReliabilityResult:
     """
     Propagate input uncertainty through the IRC:58 cumulative damage calculation.
@@ -189,10 +219,29 @@ def monte_carlo_damage(
 
         slab = SlabProperties(h=h, E=E, mu=unc.mu, k=k)
 
-        def stress_fn(load_N: float, _slab=slab) -> float:
-            return stress_edge(
-                _slab, WheelLoad.from_pressure(P=load_N / 2.0, p=tyre_pressure)
-            )
+        if thermal is None:
+            def stress_fn(load_N: float, _slab=slab) -> float:
+                return stress_edge(
+                    _slab, WheelLoad.from_pressure(P=load_N / 2.0, p=tyre_pressure)
+                )
+        else:
+            def stress_fn(load_N: float, _slab=slab, _mr=mr, _t=thermal) -> float:
+                sigma_load = stress_edge(
+                    _slab, WheelLoad.from_pressure(P=load_N / 2.0, p=tyre_pressure)
+                )
+                res = check_both_mechanisms(
+                    load_edge_stress=sigma_load,
+                    E=_slab.E,
+                    delta_T_day=_t.delta_T_day,
+                    delta_T_night=_t.delta_T_night,
+                    slab_length_mm=_t.slab_length_mm,
+                    slab_width_mm=_t.slab_width_mm,
+                    radius_rel_stiffness_mm=_slab.l,
+                    modulus_of_rupture=_mr,
+                    alpha=_t.alpha,
+                    axle_factor_tdc=_t.axle_factor_tdc,
+                )
+                return res["governing"].total_stress
 
         scaled = [
             AxleLoadGroup(g.label, g.load_N, g.repetitions * tm) for g in spectrum
@@ -225,6 +274,7 @@ def required_thickness_for_reliability(
     tol: float = 5.0,
     n_sim: int = 2000,
     seed: int | None = 42,
+    thermal: "ThermalConfig | None" = None,
 ) -> tuple[float, ReliabilityResult]:
     """
     Bisection search for the minimum slab thickness meeting a target reliability.
@@ -256,7 +306,8 @@ def required_thickness_for_reliability(
             traffic_multiplier=unc.traffic_multiplier,
             mu=unc.mu,
         )
-        return monte_carlo_damage(trial, spectrum, n_sim=n_sim, seed=seed)
+        return monte_carlo_damage(trial, spectrum, n_sim=n_sim, seed=seed,
+                                  thermal=thermal)
 
     res_max = reliability_at(h_max)
     if res_max.reliability < target_reliability:

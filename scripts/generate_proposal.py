@@ -9,6 +9,7 @@ Out:  results/SETU_Research_Proposal.docx
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 from docx import Document
@@ -20,7 +21,35 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 OUT = ROOT / "results" / "SETU_Research_Proposal.docx"
+
+
+def compute():
+    """Figures computed live from the verified engine — never hand-typed."""
+    from src.design.westergaard import SlabProperties, WheelLoad, stress_edge
+    from src.pavement.damage import AxleLoadGroup
+    from src.pavement.reliability import (
+        PavementUncertainty, Uncertain, required_thickness_for_reliability)
+    from src.pavement.thermal import check_both_mechanisms
+
+    spec = [AxleLoadGroup("a", 110_000., 150_000), AxleLoadGroup("b", 130_000., 90_000),
+            AxleLoadGroup("c", 150_000., 40_000), AxleLoadGroup("d", 170_000., 12_000),
+            AxleLoadGroup("e", 190_000., 3_000)]
+    th = {}
+    for k in (0.200, 0.150, 0.110, 0.080, 0.045):
+        u = PavementUncertainty(k=Uncertain(k, 0.22),
+                                modulus_of_rupture=Uncertain(4.5, 0.12),
+                                E=Uncertain(30_000., 0.12),
+                                thickness=Uncertain(300., 0.03))
+        h, _ = required_thickness_for_reliability(u, spec, 0.90, n_sim=1200, seed=42)
+        th[k] = h
+    slab = SlabProperties(h=300., E=30_000., mu=0.15, k=0.08)
+    sl = stress_edge(slab, WheelLoad.from_pressure(P=75_000., p=0.8))
+    r = check_both_mechanisms(sl, slab.E, 16.8, 8.4, 4500., 3500., slab.l, 4.5)
+    return {"th": th, "s_load": sl, "sr_load": sl / 4.5,
+            "sr_gov": r["governing"].stress_ratio, "gov": r["governing"].mechanism,
+            "warp": r["BUC"].warping_stress}
 
 NAVY = RGBColor(0x1F, 0x3B, 0x5C)
 BLACK = RGBColor(0x00, 0x00, 0x00)
@@ -189,6 +218,7 @@ def hrule(doc):
 
 # --------------------------------------------------------------------------- #
 def build() -> None:
+    d = compute()
     doc = Document()
     style_doc(doc)
 
@@ -671,6 +701,14 @@ def build() -> None:
                "relative stiffness; equivalent radius of resisting section; composite "
                "modulus of subgrade reaction",
                "**Implemented and verified**"],
+              ["Thermal warping module",
+               "Bradbury coefficient by continuous fitted function; edge and interior "
+               "warping stress; bottom-up (BUC) and top-down (TDC) cracking checks",
+               "**Implemented and verified**"],
+              ["Public computation tool",
+               "Browser-based calculator with complete calculation trace, verified "
+               "against the reference implementation to 3e-15",
+               "**Implemented and verified**"],
               ["Fatigue and damage module",
                "Stress ratio, allowable repetitions across the three fatigue branches, "
                "Miner summation over an axle load spectrum, residual life with traffic "
@@ -682,9 +720,9 @@ def build() -> None:
                "reliability-based thickness",
                "**Implemented and verified**"],
               ["Verification test suite",
-               "31 automated tests encoding physical invariants and the reduction to "
-               "the deterministic codal result",
-               "**31 of 31 passing**"],
+               "56 automated tests encoding physical invariants, fit accuracy and the "
+               "reduction to the deterministic codal result",
+               "**56 of 56 passing**"],
           ],
           widths=[3.4, 8.6, 3.0], font_size=9)
     caption(doc, "Table 8.1 — Status of the implemented computational core.")
@@ -700,13 +738,12 @@ def build() -> None:
           ["Modulus of subgrade reaction, k (MPa/mm)",
            "Thickness required for 90% reliability (mm)",
            "Departure from a uniform 300 mm design"],
-          [
-              ["0.200 (very good)", "285", "**28 mm less than 320 mm case**"],
-              ["0.150 (good)", "295", "5 mm saving"],
-              ["0.110 (fair)", "300", "no change"],
-              ["0.080 (poor)", "305", "5 mm additional"],
-              ["0.045 (very poor)", "320", "**20 mm additional required**"],
-          ],
+          [[f"{k:.3f} ({lbl})", f"{d['th'][k]:.0f}",
+            ("reference" if k == 0.110 else
+             (f"**{d['th'][0.110]-d['th'][k]:.0f} mm less**" if d['th'][k] < d['th'][0.110]
+              else f"**{d['th'][k]-d['th'][0.110]:.0f} mm more required**"))]
+           for k, lbl in [(0.200, "very good"), (0.150, "good"), (0.110, "fair"),
+                          (0.080, "poor"), (0.045, "very poor")]],
           widths=[5.5, 5.5, 5.0], font_size=9)
     caption(doc, "Table 8.2 — Reliability-based thickness requirement as a function of "
                  "subgrade quality, at a target reliability of 90 per cent. Computed "
@@ -714,7 +751,7 @@ def build() -> None:
                  "parameters held constant.")
 
     para(doc,
-         "The spread of 35 mm across the same corridor is the quantity that a uniform "
+         f"The spread of {d['th'][0.045]-d['th'][0.200]:.0f} mm across the same corridor is the quantity that a uniform "
          "design necessarily conceals. On favourable segments the framework identifies "
          "material that may be safely omitted; on unfavourable segments it identifies "
          "provision that is required in order to attain the same reliability. Both "
@@ -726,6 +763,28 @@ def build() -> None:
          "indicative coefficients of variation. Project-specific values derived from "
          "the client's own test records are to be substituted before any design "
          "application.", italic=True, size=10)
+
+    h(doc, "8.2 Significance of thermal warping", 3)
+    para(doc,
+         "The implemented thermal module demonstrates that warping stress frequently "
+         "governs. For a 300 mm slab under a 15 tonne axle with a daytime temperature "
+         "differential of 16.8 degrees Celsius:")
+    _und = 100 * (1 - d["sr_load"] / d["sr_gov"])
+    table(doc,
+          ["Analysis", "Stress (MPa)", "Stress ratio", "Assessment"],
+          [["Load only", f"{d['s_load']:.3f}", f"{d['sr_load']:.3f}",
+            "below the endurance limit; apparently safe"],
+           [f"Load and warping combined ({d['gov']} governs)",
+            f"{d['s_load']+d['warp']:.3f}", f"{d['sr_gov']:.3f}",
+            "**substantially above the endurance limit**"]],
+          widths=[5.2, 2.8, 2.8, 5.2], font_size=9)
+    caption(doc, "Table 8.3 — Effect of thermal warping on the governing stress ratio.")
+    para(doc,
+         f"Omitting thermal warping understates the stress ratio by approximately "
+         f"{_und:.0f} per cent. Because the fatigue relationship is steeply non-linear "
+         "in the stress ratio, this becomes an error of orders of magnitude in the "
+         "allowable number of load repetitions. Warping is therefore not a refinement "
+         "but is frequently the governing consideration.")
 
     # ---------------- 9. OUTCOMES ---------------- #
     h(doc, "9. EXPECTED OUTCOMES AND DELIVERABLES", 1)
