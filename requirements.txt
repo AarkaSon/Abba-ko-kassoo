@@ -1,0 +1,24 @@
+# CPU-only, deliberately minimal — Master is resource-constrained.
+# Core analytical/design modules in src/design run on the standard library alone.
+
+# --- Tier 1: numerics & data (needed for ML/DoE stages) ---
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+
+# --- Tier 2: visualisation ---
+matplotlib>=3.7
+
+# --- Tier 3: machine learning (CPU) ---
+scikit-learn>=1.3
+
+# --- Tier 4: document ingestion ---
+pypdf>=4.0
+
+# --- Dev ---
+pytest>=7.4
+
+# Deferred / install only when the stage is reached:
+# xgboost>=2.0        # gradient-boosted surrogates
+# pymoo>=0.6          # NSGA-II multi-objective mix optimisation
+# torch               # only if a neural surrogate is justified (heavy — ask first)

@@ -1,0 +1,65 @@
+# ---- Abaqus / FEM solver artifacts (large, regenerable — never commit) ----
+*.odb
+*.cae
+*.jnl
+*.lck
+*.sta
+*.msg
+*.dat
+*.com
+*.sim
+*.prt
+*.res
+*.mdl
+*.stt
+*.abq
+*.pac
+*.sel
+*.023
+*.frd
+*.cvg
+*.12d
+# Keep curated input decks:
+!models/**/*.inp
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---- Data (version externally; keep only small curated CSVs) ----
+data/raw/*
+data/external/*
+!data/raw/.gitkeep
+!data/external/.gitkeep
+*.h5
+*.hdf5
+*.npz
+*.pkl
+*.joblib
+
+# ---- Results (regenerable) ----
+results/figures/*
+results/tables/*
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+
+# ---- Models ----
+models/checkpoints/
+*.pt
+*.pth
+*.onnx
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
