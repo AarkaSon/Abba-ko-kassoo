@@ -428,3 +428,54 @@ with data collection. Every project listed begins with data already on disk in w
 **Learned about Master:** he verifies. He asked "is this real, for how many years" rather
 than accepting the earlier claim — correct instinct, and it caught a genuine error in my
 framing. Continue producing primary-source timelines rather than assertions.
+
+---
+## 2026-07-28 — Session 011 · Re-scope: concrete-only student projects
+**Master's objection (correct, and it killed the previous list):** his domain and his
+professor are concrete-specific; disaster records inaccessible; a non-concrete project
+would hit a blocked alley.
+
+**ULTRON accepted the correction fully.** Diagnosis of my own error: I optimised for
+"interesting real-world problem" and ignored the binding constraint, which is not data or
+difficulty but **SUPERVISOR ALIGNMENT**. A PhD supervisor who is not invested gives no lab
+time, no authorship priority, and the project dies in month three. Also under-weighted that
+OSDMA/NDMA data needs institutional MoUs taking 6-18 months — longer than the project.
+
+**New governing rule adopted:** a student project must live entirely inside the supervisor's
+own laboratory. If one email to an outside agency is needed before work can start, it is
+disqualified.
+
+**Deliverable:** `docs/concepts/IITBBS-concrete-projects.md` — 6 projects, all pure concrete
+technology, all with data on day one:
+- C1 Early-age strength prediction (UCI 1,030 + **BOxCrete 2026 open dataset: 533 measurements,
+  123 mixes, 5 curing ages** — purpose-built for this) + own lab. Novel = hybrid maturity
+  function + GP residual with calibrated uncertainty.
+- C2 Plant-specific QC / Bayesian online sigma estimation. Hook: Indian RMC plant sigma
+  ranges **1.92 to 6.57 MPa**; worst was a FULLY AUTOMATIC Delhi plant with imported
+  equipment, best was small semi-automatic => quality is an information problem, not an
+  equipment problem. Novel = adaptive sigma + cement-saving quantification.
+- C3 Coastal Odisha chloride/carbonation service life (open carbonation dataset of 20,000
+  synthetic instances from validated Possan equation + own RCPT/accelerated carbonation).
+  Geographically unique but needs NO permission - "the sea is not an agency".
+- C4 SCM multi-objective optimiser with precursor chemistry vectorisation (ties to fly-ash
+  depletion finding, India ~96% utilisation).
+- C5 Computer vision workability from slump video — **100% self-generated data**, novel =
+  collapse kinematics -> rheological parameters.
+- C6 Aggregate gradation by image — self-generated, novel = 2D-to-3D bias correction.
+
+**Recommendation: C1 + C5 in parallel.** Key efficiency identified: **the same concrete batch
+produces a cube for C1 and a slump video for C5** — one lab programme, two projects, two
+papers, halved lab burden.
+
+**Also supplied:** a pitch script for the professor that never uses the words "artificial
+intelligence" — opens with the IS 516 / maturity-method gap and ends at formwork stripping.
+Rationale given to Master: a concrete man does not want an AI project, he wants a concrete
+problem solved.
+
+**Technical warning issued:** leave-one-mix-out validation is mandatory; random splits leak
+information between curing ages of the same mix and produce fictional R2 — an error that
+invalidates a large share of published concrete-ML papers.
+
+**Learned about Master:** he correctly rejects work that ignores his institutional reality.
+Feasibility for HIM (supervisor buy-in, access, domain fit) outranks objective merit of an
+idea. Apply this filter BEFORE proposing, not after.
