@@ -371,3 +371,60 @@ more work than any argument.
 - [ ] Master's choice among SAMPARK / PRAMAAN / NIRMAAN-C.
 - [ ] 10 structural-auditor interviews (the one next action; kill criterion: median report
       time under 8 hours collapses the throughput argument).
+
+---
+## 2026-07-28 — Session 010 · SAMPARK verification + 6 student projects (IIT-BBS)
+**Commands:** (1) Is idea 1 a real industry problem, and for how many years? (2) Find real
+construction problems automatable by AI, deliverable by 4 B.Tech + 2 PhD at IIT Bhubaneswar
+in 6 months.
+
+**PART A — VERIFIED. Problem is real and 28 YEARS OLD.**
+Traced the primary record:
+- 1998 Govind Tower collapse -> K.C. Shrivastav first recommends structural audit
+- 2007 Laxmi Chhaya, Borivali, 28-30 dead -> ordinance
+- 2009 Fifth Amendment inserts **Section 353B** MMC Act 1888 (+ BPMC 1949, Nagpur 1948,
+  Maharashtra Municipal Councils 1965). Mandatory, immediate effect, Rs 25,000 penalty.
+- 2013 Chief Secretary J.K. Banthia: audits "not implemented in spirit", cause =
+  **"the inadequate number of certified structural auditors"** — THE STATE ITSELF
+  DIAGNOSED THE CAPACITY GAP AND NEVER FIXED IT
+- 2014 BMC notices 13,779 buildings -> **only 12% responded**, many visual-only (rejected)
+- 2017 Ghatkopar + Bhendi Bazar (34 dead) -> 1,59,834 notices; **MHADA admits it has NO
+  mechanism to conduct structural audits** for 14,375 cessed buildings
+- 2021 Malwani, 12 dead -> Rs 25k/month penalties; 407 C1 buildings
+- 2024 Model Bye-law 76 TIGHTENS: 15-30 yrs -> every 5 yrs; >30 yrs -> every 3 yrs
+  (demand ~tripled, engineer supply static)
+- 2024 Lucknow Transport Nagar, 8 dead -> new LDA bylaws
+- 2026 Chairman/Secretary personally liable criminally AND civilly; OC can be revoked
+
+**SELF-CORRECTION ISSUED (Directive III):** my earlier framing "audits are too slow" was
+WRONG. The record shows **audits are not being done at all** (12% response; MHADA officer:
+owners "do not undertake the audits due to the fees"). Corrected product thesis: the blocker
+is COST + SCARCITY, not engineer speed. Therefore the wedge is a cheap standardised
+**triage/screening layer** that tells a society whether a full audit is needed now — which
+is exactly Student Project 1. Also surfaced two honest risks: structural corruption
+(MLAs allege sound buildings declared dilapidated for redevelopment; auditors "face no
+accountability") and weak willingness to pay in rent-controlled cessed stock (do NOT target).
+
+**PART B — 6 projects, all with data existing on day one.**
+`docs/concepts/IITBBS-student-projects.md`
+1. Automated preliminary condition screening (SDNET2018 56k imgs + CODEBRIM 36GB + dacl10k;
+   novel = fuse CNN with IS 13935 codal rating, plus US->India domain-shift study) — feeds SAMPARK
+2. Cyclone vulnerability screening for Odisha (Bhuvan/Sentinel + Census + Fani/Amphan/Yaas
+   damage records; novel = empirical Indian fragility curve) — unbeatable Odisha fit, OSDMA partner
+3. Site safety from CCTV (public PPE datasets; novel MUST be temporal risk scoring +
+   DPDP privacy architecture, NOT the detector) — flagged as crowded
+4. Rebar congestion/constructability checker (**generates its own data — zero data risk**;
+   novel = quantitative constructability index) — safest to finish
+5. Post-disaster rapid assessment (xBD + Fani/Amphan records + IS 15988; novel =
+   inter-assessor variability study) — must plan retrospective validation, not hope for an event
+6. Concrete mix prediction (UCI + literature + IIT-BBS lab; hybrid Abrams + ML residual,
+   chemistry vectorisation per fly-ash depletion finding) — feeds ConcApp
+
+**Recommendation:** run Projects 1 + 4 in parallel — 1 carries ambition and the SAMPARK
+link, 4 is the insurance policy with zero data dependency.
+**Governing rule stated to Master:** the #1 killer of a 6-month student project is starting
+with data collection. Every project listed begins with data already on disk in week one.
+
+**Learned about Master:** he verifies. He asked "is this real, for how many years" rather
+than accepting the earlier claim — correct instinct, and it caught a genuine error in my
+framing. Continue producing primary-source timelines rather than assertions.
