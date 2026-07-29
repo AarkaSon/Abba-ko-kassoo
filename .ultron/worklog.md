@@ -479,3 +479,42 @@ invalidates a large share of published concrete-ML papers.
 **Learned about Master:** he correctly rejects work that ignores his institutional reality.
 Feasibility for HIM (supervisor buy-in, access, domain fit) outranks objective merit of an
 idea. Apply this filter BEFORE proposing, not after.
+
+---
+## 2026-07-29 — Session 012 · Two Word deliverables for C1/C4/C5
+**Command:** (1) methodology/working method/procedure/output/industry impact in a
+downloadable Word file, simple enough for newbies; (2) a second Word file with datasets in
+tabular AND graphical form for industry issues and research gaps in C1, C4, C5, including
+step-by-step MS Excel instructions to build each chart.
+
+**Delivered**
+1. `results/C1_C4_C5_Methodology_Explained.docx` — 10 parts, 20 tables, 9 embedded figures.
+   Written for a reader with zero ML exposure: plain-language explanation of machine
+   learning, the three-layer physics-first method, step-by-step procedure for each project,
+   who-does-what tables, expected outputs, industry impact by stakeholder, a "common
+   mistakes" part, and a glossary.
+2. `results/C1_C4_C5_Data_and_Research_Gaps.docx` — 10 datasets, 38 tables, 8 figures.
+   Every dataset appears as (a) copy-paste-ready data table, (b) finished chart,
+   (c) numbered MS Excel instructions to rebuild it.
+3. `scripts/make_figures.py` — 10 matplotlib charts, regenerable.
+
+**DATA-HONESTY SYSTEM INTRODUCED (Directive III).** Every figure in both documents is tagged
+[S] SOURCED / [C] COMPUTED / [I] ILLUSTRATIVE, with the convention explained on the cover
+page and repeated in the closing note. This was necessary because the request was for
+"a dataset" and I could not invent measurements. Told Master plainly that replacing each
+[I] with a measured or surveyed value IS the project, not a side task.
+
+**Key content decisions**
+- Anchored everything on the automation paradox (worst sigma 6.57 = fully automatic
+  imported plant; best 1.92 = small semi-automatic) => quality is an information problem.
+- Computed the cement/CO2 penalty of poor sigma from IS 456 cl. 8.2.4.1: 38.4 kg/m3
+  difference between best and worst plant, ~Rs 307/m3, ~Rs 5 crore/yr at 500 m3/day
+  (assumptions stated so Master can defend or revise them).
+- Included the Excel trap most students hit: uneven x-spacing (ages 1,3,7,14,28) must use
+  Scatter with Straight Lines, NOT a Line chart, which would distort the curve.
+- Repeated the leave-one-mix-out warning as a red callout — random splits leak between
+  curing ages of the same mix and produce fictional R2.
+
+**Learned about Master:** he now needs teaching material, not just strategy. Register for
+student-facing documents must be plain, worked-example-driven, and free of jargon; keep the
+rigour in the data tags and the source list rather than in the prose.
