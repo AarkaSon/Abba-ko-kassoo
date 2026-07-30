@@ -518,3 +518,32 @@ page and repeated in the closing note. This was necessary because the request wa
 **Learned about Master:** he now needs teaching material, not just strategy. Register for
 student-facing documents must be plain, worked-example-driven, and free of jargon; keep the
 rigour in the data tags and the source list rather than in the prose.
+
+---
+## 2026-07-30 — Session 013 · APA reference section
+**Command:** APA-style reference section for C1_C4_C5_Methodology_Explained.docx,
+delivered as a downloadable Word file.
+
+**Delivered:** `results/C1_C4_C5_References_APA.docx` — 31 hanging-indent APA 7th entries,
+6 tables, formatted to APA page spec (Times New Roman 12, double-spaced, 1-inch margins,
+1.27 cm hanging indent) so it can be pasted straight in.
+
+Structure: (1) the reference list itself; (2) optional extras for the cost/carbon/fly-ash
+sections, with a note that APA requires every listed reference to be cited in text;
+(3) an in-text citation map naming the exact part of the methodology document where each
+citation belongs; (4) a verification checklist; (5) the APA rules applied.
+
+**HONESTY MEASURE (Directive III):** entries are graded VERIFIED / PARTIAL / STANDARD /
+INCOMPLETE. Fields I could not confirm (some volume/issue/page/DOI and a few author lists)
+are shown in square brackets with instructions to fill and delete them. Told Master plainly
+not to submit with brackets remaining. I did not fabricate bibliographic details to make
+the list look complete — that is the one failure mode that would embarrass him in front of
+an examiner.
+
+Also included the foundational method sources his document depends on but had not yet
+cited: Abrams 1918, Nurse 1949, Saul 1951, Freiesleben Hansen & Pedersen 1977,
+Carino & Lew 2001, ASTM C1074-19, Rasmussen & Williams 2006, Deb et al. 2002 (NSGA-II),
+Yeh 1998 + UCI dataset 2007.
+
+**Learned about Master:** he wants the artefact only, will integrate it himself. Keep
+delivery tight: link first, brief explanation, no unnecessary scaffolding.
