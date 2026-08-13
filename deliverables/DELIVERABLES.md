@@ -22,8 +22,8 @@
 ## Evidence and disclosure boundaries
 
 - The user approved the five supplied DOCX files as the authoritative source set because the expected PDF was not present.
-- The patent disclosure states that no patent had been filed **as of 16 July 2026**. Current filing status must be confirmed before distribution.
-- The related manuscript is recorded as submitted on **18 July 2026**; submission/publication timing should be coordinated with patent counsel.
+- The inventors confirmed on **13 August 2026** that the patent has **not yet been filed**. The internal deck is specifically framed for the IIT Bhubaneswar IPR committee’s pre-filing evaluation and approval.
+- The related manuscript is recorded as submitted on **18 July 2026**; submission/publication timing should be coordinated with the IPR section and patent counsel.
 - The source conflicts on whether extra SFA-compensation water was added. The exact extra-water value is therefore omitted.
 - The source alternates between “wet density” and “dry density”; the decks use **reported density** pending correction.
 - Vehicle-occupant deceleration, ASI/THIV, containment, and redirection were not directly evaluated. Occupant benefit is presented only as a hypothesis requiring full-scale crash testing.

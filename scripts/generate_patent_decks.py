@@ -549,9 +549,9 @@ def base_prs(title, subject, comments) -> Presentation:
 
 
 def status_text(internal: bool) -> str:
-    return ("CONFIDENTIAL • NOT FILED AS OF SUPPLIED DISCLOSURE (16 JUL 2026) • INTERNAL IP EVALUATION ONLY"
+    return ("CONFIDENTIAL • PRE-FILING IITBBS IPR COMMITTEE EVALUATION • NOT YET FILED"
             if internal else
-            "EXTERNAL REDACTED DRAFT • IP STATUS TO CONFIRM • DISTRIBUTE ONLY WITH IITBBS IP APPROVAL")
+            "EXTERNAL REDACTED DRAFT • NOT FOR DISTRIBUTION BEFORE FILING • IITBBS IPR APPROVAL REQUIRED")
 
 
 def title_slide(prs, internal: bool):
@@ -564,7 +564,7 @@ def title_slide(prs, internal: bool):
     add_rect(slide, 8.70, 0, 0.08, 7.5, CYAN, CYAN, radius=False, line_width=0)
     add_logo(slide, True)
     add_pill(slide, 0.78, 0.62, 2.70,
-             "INTERNAL PATENT VALUE CASE" if internal else "EXTERNAL TECHNOLOGY OVERVIEW",
+             "IITBBS IPR COMMITTEE REVIEW" if internal else "EXTERNAL TECHNOLOGY OVERVIEW",
              "14364B", CYAN, 9.0, "14364B")
     title = ("Novel concrete composition for\nimpact-energy-dissipating\ncrash barriers")
     add_text(slide, 0.78, 1.25, 7.45, 2.05, title, 30.5, WHITE, True, FONT_HEAD,
@@ -582,7 +582,7 @@ def title_slide(prs, internal: bool):
              "School of Infrastructure  |  IIT Bhubaneswar  |  13 August 2026",
              10.2, "AFC3CE", margin=0)
     add_text(slide, 0.82, 6.27, 7.40, 0.48,
-             "Supplied disclosure: not filed as of 16 Jul 2026  •  Reduction to practice: Apr 2026",
+             "Current status: not yet filed  •  Purpose: IPR approval to proceed with patent filing",
              9.5, ORANGE, True, margin=0)
     add_text(slide, 9.07, 6.53, 3.85, 0.42,
              "Source: inventor-supplied manuscript Fig. 7 — 1:3 barrier impact setup",
@@ -593,7 +593,7 @@ OPENING — approximately 45 seconds
 
 • This presentation evaluates an experimentally reduced-to-practice material platform for impact-energy-dissipating crash barriers. It is not a legal patentability opinion.
 • The invention team is Haruna Al-Amir Saleh, Pratik Kanungo, Dr Anush K. Chandrappa and Prof Dinakar Pasla, School of Infrastructure, IIT Bhubaneswar.
-• The internal disclosure states that no patent had been filed as of 16 July 2026 and that a related manuscript was submitted on 18 July 2026. Treat this deck accordingly: {status}.
+• The inventors confirm that the patent has not yet been filed. This is the pre-filing presentation to the IIT Bhubaneswar IPR section seeking approval to proceed with professional drafting and filing. A related manuscript was submitted on 18 July 2026, so confidentiality and disclosure timing are critical. Treat this deck accordingly: {status}.
 • The central question is not whether the concrete is merely lighter. It is whether the tested combination creates a defensible, multi-mechanism improvement in energy absorption, post-cracking integrity and controlled damage while retaining structural-grade strength.
 • The presentation separates measured evidence from proposed occupant-safety benefit. Full-scale vehicle testing is still required before any claim of reduced occupant injury or standards compliance.
 """)
@@ -1244,9 +1244,9 @@ TRANSLATION ROADMAP — approximately 90 seconds
 
 def slide_decision(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Decision proposition: protect the platform, fund the validation", "Recommendation", 17, status, dark=True)
+    add_header(slide, "Decision request: approve patent filing and staged validation", "Recommendation", 17, status, dark=True)
     add_text(slide, 0.75, 1.36, 7.65, 0.95,
-             "The evidence is sufficient to justify a focused patent filing—\nnot yet sufficient to claim certified occupant-safety benefit.",
+             "The evidence justifies IPR approval to proceed with a focused patent filing—\nnot yet a certified occupant-safety claim.",
              23.0, WHITE, True, FONT_HEAD, margin=0, line_spacing=0.93)
     # Big decision metrics.
     vals = [(f"{PRISM_GAIN_NWC:.1f}×", "prism E₂ vs NWC", ORANGE),
@@ -1260,33 +1260,33 @@ def slide_decision(prs, internal):
         add_text(slide, x + 0.17, 3.40, 1.94, 0.28, lab, 8.9, "C3D5DD", True, margin=0,
                  align=PP_ALIGN.CENTER)
     add_rect(slide, 8.78, 1.36, 3.66, 4.87, WHITE, WHITE, radius=True, line_width=0)
-    add_text(slide, 9.10, 1.72, 3.00, 0.40, "APPROVALS REQUESTED", 10.2, BLUE, True, margin=0)
+    add_text(slide, 9.10, 1.72, 3.00, 0.40, "IPR DECISIONS REQUESTED", 10.2, BLUE, True, margin=0)
     asks = [
-        ("1", "Authorize patent drafting", "Composition + process + barrier + use claims"),
-        ("2", "Freeze public disclosure", "Coordinate manuscript timing with filing"),
-        ("3", "Fund validation gate", "Replicates, debris metrics, FE and full-scale crash"),
-        ("4", "Open partner pathway", "CRRI / NHAI / precast / barrier manufacturer"),
+        ("1", "Approve patent filing", "Authorize search, drafting and filing"),
+        ("2", "Maintain confidentiality", "Coordinate manuscript release after filing"),
+        ("3", "Endorse validation plan", "Replicates, debris metrics, FE and full-scale crash"),
+        ("4", "Enable technology transfer", "Controlled CRRI / NHAI / precast engagement"),
     ]
     for i, (n, t, b) in enumerate(asks):
         y = 2.31 + i*0.91
         add_circle_label(slide, 9.10, y, 0.42, n, [BLUE, ORANGE, TEAL, RED][i], WHITE, 9)
-        add_text(slide, 9.66, y - 0.02, 2.20, 0.28, t, 9.8, INK, True, margin=0)
-        add_text(slide, 9.66, y + 0.30, 2.23, 0.40, b, 8.1, MUTED, margin=0)
+        add_text(slide, 9.66, y - 0.02, 2.48, 0.36, t, 9.4, INK, True, margin=0)
+        add_text(slide, 9.66, y + 0.34, 2.38, 0.38, b, 7.9, MUTED, margin=0)
     add_rect(slide, 0.80, 4.42, 7.48, 1.28, "0E3047", "20485F", radius=True, line_width=0.8)
     add_text(slide, 1.06, 4.70, 1.20, 0.30, "BOTTOM LINE", 9.0, CYAN, True, margin=0)
     add_text(slide, 2.22, 4.61, 5.75, 0.64,
-             "Protect the integrated material–mechanism–barrier platform now; make full-scale occupant-risk validation the commercial release gate.",
+             "Approve filing now; retain full-scale occupant-risk validation as the commercial release gate.",
              12.2, WHITE, True, margin=0)
     add_source(slide, 0.80, 6.44, 11.60,
-               "Recommendation based on inventor-supplied evidence and disclosed patent status as of 16 Jul 2026. No legal, safety-certification or investment assurance is implied.", True)
+               "Recommendation based on inventor-supplied evidence and inventor-confirmed pre-filing status as of 13 Aug 2026. No legal, safety-certification or investment assurance is implied.", True)
     add_notes(slide, """
 CLOSE — approximately 60 seconds
 
-• The recommendation is to proceed with a focused patent filing, because the team has reduced the concept to practice and demonstrated a distinctive combination of lower reported density, retained structural strength, major repeated-impact endurance and a positive one-third-scale barrier result.
+• The recommendation to the IIT Bhubaneswar IPR section is to approve proceeding with a focused patent filing. The team has reduced the concept to practice and demonstrated a distinctive combination of lower reported density, retained structural strength, major repeated-impact endurance and a positive one-third-scale barrier result.
 • The evidence does not yet support a certified occupant-safety claim. The commercial release gate must be a full-scale standards-compliant vehicle test with occupant-risk, containment, redirection, stability and debris criteria.
-• Four approvals are requested: authorize professional drafting and searching; coordinate or pause public disclosure until filing; fund a staged validation programme; and engage a crash-test/precast partner.
+• Four IPR decisions are requested: approve professional prior-art searching, drafting and filing; maintain confidentiality and coordinate manuscript release; endorse a staged validation programme; and enable controlled engagement with crash-test and precast partners.
 • The claim strategy should protect the integrated platform rather than a single recipe: material composition and ranges, process controls, a barrier article, and the use/performance relationship where legally enabled.
-• Final line: protect the invention now, validate the occupant benefit next, and commercialize only after the full-scale safety gate is passed.
+• Final line: approve protection now, validate the occupant benefit next, and commercialize only after the full-scale safety gate is passed.
 """)
 
 
@@ -1408,6 +1408,7 @@ def write_workbook(path: Path) -> None:
     ws.append(["Patent-project presentation data workbook"])
     ws.append(["Source", "Inventor-supplied manuscript/disclosure unless otherwise stated"])
     ws.append(["Caveat", "Values transcribed from supplied documents; no independent raw-data audit. Extra-water protocol omitted pending correction; density basis unresolved."])
+    ws.append(["Patent status", "Not yet filed; presentation prepared for IIT Bhubaneswar IPR committee pre-filing evaluation and approval."])
     ws.append(["Generated", "13 August 2026"])
 
     ws = wb.create_sheet("Global context")
