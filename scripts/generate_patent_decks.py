@@ -43,29 +43,29 @@ LOGO = ROOT / "assets" / "iitbbs_logo_official.png"
 SLIDE_W = Inches(13.333333)
 SLIDE_H = Inches(7.5)
 
-# Palette
-NAVY = "08243A"
-NAVY_2 = "0D3651"
-INK = "172733"
-MUTED = "596C78"
-PALE = "F4F7F9"
+# Academic palette — restrained IITBBS-inspired blues with muted research accents.
+NAVY = "17365D"
+NAVY_2 = "244A6D"
+INK = "202B33"
+MUTED = "5D6972"
+PALE = "FFFFFF"
 WHITE = "FFFFFF"
-GRID = "D8E2E8"
-BLUE = "2B78A6"
-CYAN = "22B8C7"
-TEAL = "178D86"
-GREEN = "2E9D69"
-ORANGE = "F39C3D"
-RED = "D95D5D"
-YELLOW = "F2C94C"
-LIGHT_BLUE = "DDEEF5"
-LIGHT_CYAN = "DDF5F4"
-LIGHT_ORANGE = "FFF0DF"
-LIGHT_RED = "FBE7E7"
-LIGHT_GREEN = "E3F3EB"
-DARK_BG = "061B2C"
+GRID = "CCD6DE"
+BLUE = "2E6F9E"
+CYAN = "4A89A3"
+TEAL = "3F7E73"
+GREEN = "557A60"
+ORANGE = "B37A30"
+RED = "9A4651"
+YELLOW = "B9913B"
+LIGHT_BLUE = "EAF1F6"
+LIGHT_CYAN = "EAF2F3"
+LIGHT_ORANGE = "F6EFE4"
+LIGHT_RED = "F6EAEC"
+LIGHT_GREEN = "ECF2ED"
+DARK_BG = "17365D"
 
-FONT_HEAD = "Aptos Display"
+FONT_HEAD = "Cambria"
 FONT_BODY = "Aptos"
 
 # Source data transcribed from inventor-supplied manuscript tables/charts.
@@ -227,7 +227,7 @@ def add_shape(slide, shape_type, x, y, w, h, fill=WHITE, line=GRID,
     return shp
 
 
-def add_rect(slide, x, y, w, h, fill=WHITE, line=GRID, radius=True,
+def add_rect(slide, x, y, w, h, fill=WHITE, line=GRID, radius=False,
              line_width=0.8, name=None):
     st = MSO_SHAPE.ROUNDED_RECTANGLE if radius else MSO_SHAPE.RECTANGLE
     return add_shape(slide, st, x, y, w, h, fill, line, line_width=line_width, name=name)
@@ -245,8 +245,8 @@ def add_line(slide, x1, y1, x2, y2, color=GRID, width=1.0, dash=False, name=None
 
 
 def add_pill(slide, x, y, w, text, fill=LIGHT_BLUE, color=BLUE, size=9.5, line=None):
-    shp = add_rect(slide, x, y, w, 0.32, fill, line or fill, radius=True)
-    shp.adjustments[0] = 0.5
+    """Compact academic annotation box (kept rectangular, not badge-like)."""
+    shp = add_rect(slide, x, y, w, 0.32, fill, line or GRID, radius=False, line_width=0.5)
     add_text(slide, x + 0.04, y + 0.015, w - 0.08, 0.27, text, size, color, True,
              align=PP_ALIGN.CENTER, valign=MSO_VERTICAL_ANCHOR.MIDDLE, margin=0)
     return shp
@@ -254,60 +254,64 @@ def add_pill(slide, x, y, w, text, fill=LIGHT_BLUE, color=BLUE, size=9.5, line=N
 
 def add_card(slide, x, y, w, h, title, body="", accent=BLUE, fill=WHITE,
              title_size=13, body_size=10.5, icon=None):
-    add_rect(slide, x, y, w, h, fill, GRID, radius=True, line_width=0.7)
-    add_rect(slide, x, y, 0.07, h, accent, accent, radius=False, line_width=0)
-    tx = x + 0.23
+    """Academic content panel with a thin top rule and square corners."""
+    add_rect(slide, x, y, w, h, fill, GRID, radius=False, line_width=0.6)
+    add_rect(slide, x, y, w, 0.045, accent, accent, radius=False, line_width=0)
+    tx = x + 0.18
     if icon:
-        add_text(slide, tx, y + 0.20, 0.35, 0.35, icon, 17, accent, True,
+        add_text(slide, tx, y + 0.16, 0.34, 0.30, icon, 11, accent, True,
                  align=PP_ALIGN.CENTER, valign=MSO_VERTICAL_ANCHOR.MIDDLE, margin=0)
-        tx += 0.46
-    add_text(slide, tx, y + 0.18, w - (tx - x) - 0.18, 0.35, title, title_size, INK, True,
+        tx += 0.40
+    add_text(slide, tx, y + 0.15, w - (tx - x) - 0.16, 0.35, title, title_size, NAVY, True,
              FONT_HEAD, valign=MSO_VERTICAL_ANCHOR.MIDDLE, margin=0)
     if body:
-        add_text(slide, x + 0.23, y + 0.62, w - 0.43, h - 0.76, body, body_size, MUTED,
-                 False, FONT_BODY, margin=0, line_spacing=1.05)
+        add_text(slide, x + 0.18, y + 0.60, w - 0.36, h - 0.72, body, body_size, INK,
+                 False, FONT_BODY, margin=0, line_spacing=1.03)
 
 
 def add_metric(slide, x, y, w, h, value, label, accent=CYAN, fill=WHITE,
-               value_size=25, sub=None):
-    add_rect(slide, x, y, w, h, fill, GRID, radius=True, line_width=0.7)
-    add_text(slide, x + 0.18, y + 0.16, w - 0.36, 0.48, value, value_size, accent, True,
+               value_size=22, sub=None):
+    """Restrained numerical result cell for academic summaries."""
+    add_rect(slide, x, y, w, h, fill, GRID, radius=False, line_width=0.6)
+    add_rect(slide, x, y, w, 0.045, accent, accent, radius=False, line_width=0)
+    add_text(slide, x + 0.16, y + 0.14, w - 0.32, 0.42, value, value_size, accent, True,
              FONT_HEAD, margin=0, valign=MSO_VERTICAL_ANCHOR.MIDDLE)
-    add_text(slide, x + 0.18, y + 0.70, w - 0.36, 0.44, label, 10.5, INK, True,
+    add_text(slide, x + 0.16, y + 0.64, w - 0.32, 0.40, label, 10.0, NAVY, True,
              margin=0)
     if sub:
-        add_text(slide, x + 0.18, y + 1.12, w - 0.36, h - 1.24, sub, 8.5, MUTED,
+        add_text(slide, x + 0.16, y + 1.03, w - 0.32, max(0.18, h - 1.13), sub, 8.2, MUTED,
                  margin=0)
 
 
 def add_logo(slide, dark=False):
-    # A small white plaque keeps the official mark legible on every slide.
-    add_rect(slide, 12.22, 0.14, 0.82, 0.64, WHITE, WHITE, radius=True, line_width=0)
+    # Unobtrusive institutional mark; white backing preserves legibility.
+    add_rect(slide, 12.20, 0.12, 0.84, 0.66, WHITE, WHITE, radius=False, line_width=0)
     slide.shapes.add_picture(str(LOGO), Inches(12.34), Inches(0.18), width=Inches(0.58), height=Inches(0.54))
 
 
 def add_header(slide, title, section, slide_no, status, dark=False):
-    bg = DARK_BG if dark else PALE
-    txt = WHITE if dark else INK
+    bg = DARK_BG if dark else WHITE
+    txt = WHITE if dark else NAVY
     slide.background.fill.solid()
     slide.background.fill.fore_color.rgb = rgb(bg)
-    add_text(slide, 0.70, 0.18, 2.75, 0.22, section.upper(), 8.5,
-             CYAN if dark else BLUE, True, margin=0)
-    # Reserve two lines for research-style titles; this prevents descenders from
-    # colliding with the divider on longer headings.
-    title_size = 22.5 if len(title) <= 58 else 20.8
-    add_text(slide, 0.70, 0.37, 10.85, 0.67, title, title_size, txt, True, FONT_HEAD,
+    add_rect(slide, 0.0, 0.0, 0.10, 7.5, NAVY if not dark else CYAN,
+             NAVY if not dark else CYAN, radius=False, line_width=0)
+    add_text(slide, 0.68, 0.17, 3.15, 0.22, section.upper(), 8.2,
+             LIGHT_BLUE if dark else BLUE, True, margin=0)
+    title_size = 22.0 if len(title) <= 58 else 20.2
+    add_text(slide, 0.68, 0.36, 10.90, 0.67, title, title_size, txt, True, FONT_HEAD,
              margin=0, valign=MSO_VERTICAL_ANCHOR.MIDDLE, line_spacing=0.92)
     add_logo(slide, dark)
-    add_line(slide, 0.70, 1.10, 12.62, 1.10, "284A60" if dark else GRID, 0.8)
+    add_line(slide, 0.68, 1.08, 12.62, 1.08, CYAN if dark else NAVY, 1.15)
     add_footer(slide, slide_no, status, dark)
 
 
 def add_footer(slide, slide_no, status, dark=False):
-    c = "AEC0CA" if dark else MUTED
-    add_line(slide, 0.70, 7.08, 12.62, 7.08, "284A60" if dark else GRID, 0.7)
-    add_text(slide, 0.72, 7.16, 10.7, 0.18, status, 7.6, c, True, margin=0)
-    add_text(slide, 12.00, 7.14, 0.60, 0.19, f"{slide_no:02d}", 8.3, c, True,
+    c = "C7D3DA" if dark else MUTED
+    add_line(slide, 0.68, 7.08, 12.62, 7.08, "537086" if dark else GRID, 0.65)
+    add_text(slide, 0.70, 7.16, 10.9, 0.18, status, 7.2,
+             c if dark else RED, True, margin=0)
+    add_text(slide, 12.00, 7.14, 0.60, 0.19, f"{slide_no:02d}", 8.1, c, True,
              align=PP_ALIGN.RIGHT, margin=0)
 
 
@@ -405,8 +409,8 @@ def add_column_chart(slide, x, y, w, h, categories, series_data,
         labels.font.size = Pt(7.5)
         labels.font.color.rgb = rgb(INK)
     if title:
-        add_text(slide, x + 0.05, y + 0.02, w - 0.1, 0.26, title, 10.5, INK, True,
-                 margin=0, align=PP_ALIGN.CENTER)
+        add_text(slide, x + 0.05, y + 0.02, w - 0.1, 0.26, title, 10.3, NAVY, True,
+                 FONT_HEAD, margin=0, align=PP_ALIGN.CENTER)
     return chart
 
 
@@ -443,8 +447,8 @@ def add_bar_chart(slide, x, y, w, h, categories, values, color=BLUE,
     labels.font.size = Pt(8)
     labels.font.color.rgb = rgb(INK)
     if title:
-        add_text(slide, x + 0.05, y + 0.02, w - 0.1, 0.26, title, 10.5, INK, True,
-                 margin=0, align=PP_ALIGN.CENTER)
+        add_text(slide, x + 0.05, y + 0.02, w - 0.1, 0.26, title, 10.3, NAVY, True,
+                 FONT_HEAD, margin=0, align=PP_ALIGN.CENTER)
     return chart
 
 
@@ -556,38 +560,43 @@ def status_text(internal: bool) -> str:
 
 def title_slide(prs, internal: bool):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    slide.background.fill.solid(); slide.background.fill.fore_color.rgb = rgb(DARK_BG)
+    slide.background.fill.solid(); slide.background.fill.fore_color.rgb = rgb(WHITE)
     status = status_text(internal)
-    # Right-side experimental image.
-    hero = darken_image(MEDIA / "image8.jpeg", "title_test_rig", (1000, 1000), 0.62)
-    slide.shapes.add_picture(str(hero), Inches(8.75), Inches(0), width=Inches(4.58), height=Inches(7.5))
-    add_rect(slide, 8.70, 0, 0.08, 7.5, CYAN, CYAN, radius=False, line_width=0)
-    add_logo(slide, True)
-    add_pill(slide, 0.78, 0.62, 2.70,
-             "IITBBS IPR COMMITTEE REVIEW" if internal else "EXTERNAL TECHNOLOGY OVERVIEW",
-             "14364B", CYAN, 9.0, "14364B")
-    title = ("Novel concrete composition for\nimpact-energy-dissipating\ncrash barriers")
-    add_text(slide, 0.78, 1.25, 7.45, 2.05, title, 30.5, WHITE, True, FONT_HEAD,
-             margin=0, line_spacing=0.88)
-    sub = ("Steel-fibre reinforced sintered-fly-ash lightweight aggregate concrete"
+    add_rect(slide, 0.0, 0.0, 0.12, 7.5, NAVY, NAVY, radius=False, line_width=0)
+    add_logo(slide, False)
+    add_text(slide, 0.78, 0.48, 5.0, 0.28,
+             "IIT BHUBANESWAR • SCHOOL OF INFRASTRUCTURE", 9.0, BLUE, True, margin=0)
+    add_text(slide, 0.78, 0.84, 5.0, 0.30,
+             "PRE-FILING IPR COMMITTEE PRESENTATION" if internal else "REDACTED ACADEMIC TECHNOLOGY OVERVIEW",
+             10.0, RED, True, margin=0)
+    title = "Novel concrete composition for\nimpact-energy-dissipating crash barriers"
+    add_text(slide, 0.78, 1.42, 7.65, 1.72, title, 29.0, NAVY, True, FONT_HEAD,
+             margin=0, line_spacing=0.94)
+    sub = ("Steel-fibre-reinforced sintered-fly-ash lightweight aggregate concrete"
            if internal else
-           "A lightweight, ductile concrete platform for safer and more sustainable rigid barriers")
-    add_text(slide, 0.82, 3.57, 7.35, 0.70, sub, 15.0, "C6D8E2", False,
-             margin=0, line_spacing=1.05)
-    add_line(slide, 0.82, 4.54, 7.75, 4.54, "315267", 1.0)
-    add_text(slide, 0.82, 4.82, 7.40, 0.60,
+           "A lightweight, ductile concrete platform for impact-resistant rigid barriers")
+    add_text(slide, 0.80, 3.27, 7.45, 0.58, sub, 14.0, INK, False,
+             margin=0, line_spacing=1.02)
+    add_line(slide, 0.80, 4.08, 8.18, 4.08, BLUE, 1.1)
+    add_text(slide, 0.80, 4.34, 7.55, 0.56,
              "Haruna Al-Amir Saleh  •  Pratik Kanungo  •  Anush K. Chandrappa  •  Dinakar Pasla",
-             11.2, WHITE, True, margin=0)
-    add_text(slide, 0.82, 5.48, 5.8, 0.48,
-             "School of Infrastructure  |  IIT Bhubaneswar  |  13 August 2026",
-             10.2, "AFC3CE", margin=0)
-    add_text(slide, 0.82, 6.27, 7.40, 0.48,
-             "Current status: not yet filed  •  Purpose: IPR approval to proceed with patent filing",
-             9.5, ORANGE, True, margin=0)
-    add_text(slide, 9.07, 6.53, 3.85, 0.42,
-             "Source: inventor-supplied manuscript Fig. 7 — 1:3 barrier impact setup",
-             7.1, "D8E5EB", False, align=PP_ALIGN.RIGHT, margin=0)
-    add_footer(slide, 1, status, True)
+             10.9, NAVY, True, margin=0)
+    add_text(slide, 0.80, 4.92, 7.35, 0.58,
+             "School of Infrastructure, Indian Institute of Technology Bhubaneswar\nOdisha, India  •  14 August 2026",
+             9.8, MUTED, margin=0, line_spacing=1.0)
+    add_rect(slide, 0.80, 5.72, 7.48, 0.62, LIGHT_RED, RED, radius=False, line_width=0.6)
+    add_text(slide, 1.00, 5.88, 7.08, 0.30,
+             "Status: not yet filed  |  Purpose: IPR approval to proceed with patent filing",
+             9.4, RED, True, margin=0)
+    add_rect(slide, 8.75, 1.12, 3.85, 4.98, WHITE, GRID, radius=False, line_width=0.8)
+    add_picture_contain(slide, MEDIA / "image8.jpeg", 8.86, 1.23, 3.63, 4.54,
+                        "academic_title_barrier_setup")
+    add_text(slide, 8.91, 5.80, 3.52, 0.25,
+             "One-third-scale barrier pendulum-impact apparatus",
+             7.8, MUTED, False, align=PP_ALIGN.CENTER, margin=0)
+    add_source(slide, 8.91, 6.10, 3.52,
+               "Inventor-supplied manuscript, Fig. 7", size=6.8)
+    add_footer(slide, 1, status, False)
     add_notes(slide, f"""
 OPENING — approximately 45 seconds
 
@@ -601,29 +610,34 @@ OPENING — approximately 45 seconds
 
 def slide_executive(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "The value case in one view", "Executive thesis", 2, status)
-    add_text(slide, 0.73, 1.17, 11.85, 0.44,
-             "A rigid-barrier material that trades brittle force transfer for controlled, multi-scale energy dissipation.",
-             16.2, NAVY, True, FONT_HEAD, margin=0)
-    metrics = [
-        (f"{DENSITY_REDUCTION*100:.1f}%", "lower reported density", "LWC15 vs NWC", BLUE),
-        (f"{TENSILE_GAIN*100:.0f}%", "higher splitting tensile strength", "7.60 vs 4.32 MPa", TEAL),
-        (f"{PRISM_GAIN_NWC:.1f}×", "prism failure-energy capacity", "2,927.8 vs 53.0 N·m", ORANGE),
-        (f"{BARRIER_ENERGY_GAIN:.1f}×", "scaled-barrier failure energy", "2,746 vs 1,373 N·m", RED),
+    add_header(slide, "Research contribution and quantitative evidence", "Study synopsis", 2, status)
+    add_rect(slide, 0.72, 1.30, 11.88, 0.62, LIGHT_BLUE, BLUE, radius=False, line_width=0.6)
+    add_text(slide, 0.94, 1.45, 11.44, 0.31,
+             "Research question: can structural lightweight concrete dissipate impact energy while retaining M40-class strength and post-cracking integrity?",
+             11.2, NAVY, True, FONT_HEAD, margin=0)
+    selected = "LWC15" if internal else "Selected LWC"
+    rows = [
+        ["Response", "NWC reference", selected, "Relative effect", "Evidence / scope"],
+        ["Reported density", "2,466 kg/m³", "1,987 kg/m³", f"−{DENSITY_REDUCTION*100:.1f}%", "Measured; basis to verify"],
+        ["28 d compression", "49.62 MPa", "55.40 MPa", f"+{COMP_GAIN*100:.1f}%", "3 cubes per mix stated"],
+        ["28 d split tension", "4.32 MPa", "7.60 MPa", f"+{TENSILE_GAIN*100:.1f}%", "3 cylinders per mix stated"],
+        ["Prism failure energy, E₂", "52.97 N·m", "2,927.81 N·m", f"{PRISM_GAIN_NWC:.1f}×", "Repeated-impact screen"],
+        ["Scaled-barrier E₂", "1,373 N·m", "2,746 N·m", f"{BARRIER_ENERGY_GAIN:.1f}×", "n = 1 barrier per mix"],
+        ["Scaled-barrier deformation", "4.22 mm", "12.70 mm", f"{BARRIER_DEF_GAIN:.2f}×", "n = 1 barrier per mix"],
     ]
-    for i, (v, lab, sub, col) in enumerate(metrics):
-        add_metric(slide, 0.73 + i*3.02, 1.82, 2.78, 1.62, v, lab, col, WHITE, 24, sub)
-    add_card(slide, 0.73, 3.78, 3.80, 2.70, "Protectable technical thesis",
-             "Specific material architecture + dual dissipation mechanism + crash-barrier use + tested performance envelope. Claims should centre the integrated system—not isolated known constituents.",
-             CYAN, WHITE, 13.5, 10.7, "01")
-    add_card(slide, 4.75, 3.78, 3.80, 2.70, "Commercial value pathway",
-             "Precast-compatible manufacturing; lower barrier self-weight; improved damage control; potential transport, deck-load and lifecycle advantages. These benefits require pilot-scale TEA/LCA validation.",
-             GREEN, WHITE, 13.5, 10.7, "02")
-    add_card(slide, 8.77, 3.78, 3.80, 2.70, "Evidence boundary",
-             "Material and repeated-impact results are strong signals. The 1:3 barrier test used one specimen per mix and did not measure ASI/THIV, vehicle containment or redirection. Occupant benefit remains a testable hypothesis.",
-             RED, WHITE, 13.5, 10.7, "03")
-    add_source(slide, 0.73, 6.67, 11.7,
-               "Inventor dataset, Al-Amir et al. manuscript (submitted 18 Jul 2026), Tables/Figs 8–12; calculations in accompanying workbook.")
+    add_table(slide, 0.72, 2.12, 11.88, 3.35, rows,
+              [2.25, 1.55, 1.65, 1.35, 2.55], font_size=8.8,
+              first_col_left=True, highlight_rows={4: LIGHT_ORANGE, 5: LIGHT_CYAN, 6: LIGHT_CYAN})
+    add_rect(slide, 0.72, 5.72, 5.76, 0.64, WHITE, BLUE, radius=False, line_width=0.8)
+    add_text(slide, 0.91, 5.86, 5.38, 0.36,
+             "Interpretation: strongest contribution is post-cracking impact endurance, not simply compressive strength.",
+             9.5, NAVY, True, margin=0)
+    add_rect(slide, 6.72, 5.72, 5.88, 0.64, WHITE, RED, radius=False, line_width=0.8)
+    add_text(slide, 6.91, 5.86, 5.50, 0.36,
+             "Boundary: occupant-risk reduction and standards compliance require full-scale vehicle testing.",
+             9.5, RED, True, margin=0)
+    add_source(slide, 0.73, 6.55, 11.7,
+               "Inventor dataset, Al-Amir et al. manuscript (submitted 18 Jul 2026), Tables/Figs. 8–12; calculations in accompanying workbook.")
     patent_thesis_note = ("The patent thesis should not be “steel fibre is useful” or “lightweight aggregate is useful”; both are known. The potentially protectable value is the integrated composition, the use of SFA and hooked-end fibres in a crash-barrier system, the dual energy-dissipation mechanism, and the demonstrated performance combination."
                           if internal else
                           "The potentially protectable value is the integrated material architecture, crash-barrier application, dual energy-dissipation mechanism and demonstrated performance combination. Exact formulation and processing details are redacted from this version.")
@@ -640,32 +654,35 @@ KEY MESSAGE — approximately 60 seconds
 
 def slide_global(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "The need is global: safety, materials and circularity intersect", "Global evidence", 3, status)
-    add_doughnut(slide, 0.70, 1.31, 4.10, 3.25,
+    add_header(slide, "Global context: road safety, material demand and circularity", "Global evidence", 3, status)
+    add_doughnut(slide, 0.72, 1.34, 4.05, 3.20,
                  ["Upper-middle", "Lower-middle", "Low", "High"], [35, 44, 13, 8],
                  [BLUE, CYAN, ORANGE, GRID])
-    add_text(slide, 2.02, 2.26, 1.48, 0.78, "92%", 27, NAVY, True, FONT_HEAD,
+    add_text(slide, 2.00, 2.22, 1.50, 0.70, "92%", 26, NAVY, True, FONT_HEAD,
              align=PP_ALIGN.CENTER, valign=MSO_VERTICAL_ANCHOR.MIDDLE, margin=0)
-    add_text(slide, 1.90, 2.95, 1.72, 0.40, "of deaths in LMICs", 9.5, MUTED, True,
-             align=PP_ALIGN.CENTER, margin=0)
-    add_text(slide, 0.84, 4.59, 3.85, 0.46, "Global road-traffic deaths by country income group, 2021", 10.5, INK, True,
-             align=PP_ALIGN.CENTER, margin=0)
-    # Global context cards.
-    cards = [
-        ("1.19 M", "road deaths/year", "WHO 2023; 2021 estimate", RED),
-        ("50 Gt", "sand + gravel/year", "UNEP 2022 estimate", ORANGE),
-        ("4.0 Gt", "cement produced, 2024", "USGS 2025 • ~0.6 tCO₂/t (IEA)", BLUE),
-        (">1 Gt", "coal fly ash/year", "IEA CCC 2020; global order", TEAL),
+    add_text(slide, 0.84, 4.56, 3.83, 0.44,
+             "Figure 1. Global road-traffic deaths by country income group (2021)",
+             9.1, NAVY, True, align=PP_ALIGN.CENTER, margin=0)
+    context_rows = [
+        ["Indicator", "Global estimate", "Research relevance", "Primary source"],
+        ["Road-traffic mortality", "1.19 million y⁻¹", "Need to reduce crash severity", "WHO (2023)"],
+        ["Sand + gravel use", "≈50 Gt y⁻¹", "Pressure on natural aggregate", "UNEP (2022)"],
+        ["Cement production", "≈4.0 Gt (2024)", "Large infrastructure material flow", "USGS (2025)"],
+        ["Cement CO₂ intensity", "just under 0.6 t/t", "Binder decarbonisation pressure", "IEA (2023)"],
+        ["Coal fly ash", ">1 Gt y⁻¹ (order)", "Potential circular feedstock", "Reid et al. (2020)"],
     ]
-    positions = [(5.12, 1.33), (8.87, 1.33), (5.12, 3.16), (8.87, 3.16)]
-    for (v, lab, sub, col), (x, y) in zip(cards, positions):
-        add_metric(slide, x, y, 3.42, 1.54, v, lab, col, WHITE, 23, sub)
-    add_rect(slide, 5.12, 5.10, 7.17, 1.05, NAVY, NAVY, radius=True, line_width=0)
-    add_text(slide, 5.38, 5.30, 6.65, 0.60,
-             "Opportunity: reduce crash severity while substituting a portion of virgin aggregate and clinker-intensive binder inputs.\nBoundary: this project has not yet completed full-scale crash testing or a product LCA.",
-             11.0, WHITE, True, margin=0, line_spacing=1.0)
-    add_source(slide, 0.73, 6.45, 11.9,
-               "WHO, Global Status Report on Road Safety 2023, pp. 4, 14; UNEP, Sand and Sustainability (2022); USGS, MCS—Cement (2025); IEA, Cement (2023); Reid, Carpenter & Masili, IEA CCC/303 (2020).")
+    add_table(slide, 5.05, 1.38, 7.55, 3.66, context_rows,
+              [1.65, 1.45, 2.65, 1.45], font_size=8.7, first_col_left=True)
+    add_rect(slide, 0.82, 5.36, 11.70, 0.50, LIGHT_BLUE, BLUE, radius=False, line_width=0.6)
+    add_text(slide, 1.02, 5.48, 11.30, 0.25,
+             "Research relevance: the proposed barrier material links impact-energy management with reduced self-weight and industrial by-product utilisation.",
+             9.6, NAVY, True, margin=0)
+    add_rect(slide, 0.82, 5.96, 11.70, 0.46, WHITE, RED, radius=False, line_width=0.6)
+    add_text(slide, 1.02, 6.07, 11.30, 0.23,
+             "Evidence boundary: no product-level LCA or full-scale vehicle crash test has yet been completed.",
+             9.2, RED, True, margin=0)
+    add_source(slide, 0.73, 6.56, 11.9,
+               "WHO (2023), pp. 4, 14; UNEP (2022); USGS MCS—Cement (2025); IEA Cement (2023); Reid, Carpenter & Masili, IEA CCC/303 (2020).")
     lca_boundary = ("The mix uses GGBS and sintered fly ash aggregate, but sintering consumes energy and the high steel-fibre dosage has embodied impacts."
                     if internal else
                     "The technology incorporates industrial by-product pathways, but aggregate processing and the reinforcing phase also carry embodied impacts; exact constituents are redacted.")
@@ -683,7 +700,7 @@ GLOBAL CONTEXT — approximately 75 seconds
 
 def slide_prior_art(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Prior art leaves an unresolved multi-objective gap", "Landscape", 4, status)
+    add_header(slide, "Literature and prior-art synthesis", "Research gap", 4, status)
     lightweight_gap = "No SFA–fibre proof set" if internal else "No integrated proof set"
     rows = [
         ["Approach", "Containment / strength", "Energy dissipation", "Damage control", "Scale / cost", "Residual gap"],
@@ -696,7 +713,7 @@ def slide_prior_art(prs, internal):
     ]
     add_table(slide, 0.72, 1.35, 11.90, 3.78, rows, [1.7, 1.35, 1.35, 1.45, 1.45, 2.10],
               font_size=8.6, first_col_left=True, highlight_rows={6: LIGHT_CYAN})
-    add_rect(slide, 0.73, 5.44, 11.88, 0.95, WHITE, GRID, radius=True)
+    add_rect(slide, 0.73, 5.44, 11.88, 0.95, LIGHT_BLUE, BLUE, radius=False, line_width=0.6)
     add_text(slide, 0.98, 5.63, 2.10, 0.30, "PATENT POSITIONING", 9.0, BLUE, True, margin=0)
     positioning = ("Avoid a broad “first lightweight concrete barrier” assertion: lightweight-concrete barrier concepts appear in conference literature. Centre novelty on the specific integrated composition, SFA function, hooked-fibre crack control, quantified synergy and manufacturing/control envelope."
                    if internal else
@@ -724,46 +741,44 @@ PRIOR ART AND DIFFERENTIATION — approximately 90 seconds
 
 def slide_invention(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Invention architecture: three functions, one controlled response", "Technical concept", 5, status)
+    add_header(slide, "Mechanistic hypothesis and invention architecture", "Technical concept", 5, status)
     if internal:
-        items = [
-            ("SFA lightweight aggregate", "Porous particle crushing + internal damping", BLUE, "A"),
-            ("Hooked-end steel fibre", "Crack bridging + debonding + pull-out", ORANGE, "B"),
-            ("OPC + 20% GGBS matrix", "M40+ strength + fibre/aggregate load transfer", TEAL, "C"),
+        mechanism_rows = [
+            ["Material feature", "Micromechanical process", "Expected engineering consequence"],
+            ["Sintered fly-ash lightweight aggregate", "Local particle crushing; pore collapse; internal damping", "Reduced density and distributed impact-energy dissipation"],
+            ["Hooked-end steel fibre", "Crack bridging; debonding; frictional pull-out", "Higher split tension, residual toughness and fragment restraint"],
+            ["OPC–20% GGBS matrix", "Matrix load transfer and interfacial bonding", "M40+ compressive strength and stable fibre anchorage"],
         ]
     else:
-        items = [
-            ("Porous lightweight aggregate", "Local crushing + internal damping", BLUE, "A"),
-            ("Discrete crack-bridging reinforcement", "Debonding + pull-out + integrity", ORANGE, "B"),
-            ("Lower-clinker structural matrix", "Strength + interfacial load transfer", TEAL, "C"),
+        mechanism_rows = [
+            ["Material feature", "Micromechanical process", "Expected engineering consequence"],
+            ["Porous lightweight phase", "Local crushing; pore collapse; internal damping", "Reduced density and distributed impact-energy dissipation"],
+            ["Discrete crack-bridging phase", "Debonding; frictional pull-out; bridging", "Residual toughness and fragment restraint"],
+            ["Structural binder phase", "Matrix load transfer and interfacial bonding", "Structural-grade strength and stable reinforcement anchorage"],
         ]
-    for i, (title, body, col, lab) in enumerate(items):
-        y = 1.39 + i*1.34
-        add_circle_label(slide, 0.82, y + 0.12, 0.54, lab, col, WHITE, 12)
-        add_card(slide, 1.18, y, 4.45, 1.04, title, body, col, WHITE, 13.0, 10.0)
-        add_chevron(slide, 5.85, y + 0.30, 0.62, 0.42, col)
-    # Output block.
-    add_rect(slide, 6.66, 1.35, 5.70, 3.82, NAVY, NAVY, radius=True, line_width=0)
-    add_text(slide, 7.00, 1.67, 5.08, 0.38, "DESIGNED IMPACT RESPONSE", 10.0, CYAN, True,
-             margin=0)
-    outputs = [
-        ("01", "Crack initiation", "Fibres redistribute tensile stress and delay localisation."),
-        ("02", "Controlled deformation", "Aggregate crushing and fibre pull-out consume energy."),
-        ("03", "Residual integrity", "Bridging restrains large fragments and preserves load path."),
-        ("04", "Lower transmitted peak force", "Mechanistic hypothesis; requires vehicle-level validation."),
-    ]
-    for i, (n, t, b) in enumerate(outputs):
-        y = 2.18 + i*0.70
-        add_text(slide, 7.00, y, 0.42, 0.32, n, 9.0, CYAN, True, margin=0)
-        add_text(slide, 7.47, y - 0.02, 1.62, 0.30, t, 10.5, WHITE, True, margin=0)
-        add_text(slide, 9.16, y - 0.02, 2.80, 0.43, b, 8.8, "C4D4DC", margin=0)
-    add_rect(slide, 0.82, 5.48, 11.54, 0.78, LIGHT_CYAN, LIGHT_CYAN, radius=True, line_width=0)
-    thesis = ("Proposed inventive step: an intentionally semi-energy-absorbing rigid barrier in which the material—not only the barrier geometry—dissipates collision energy while retaining structural-grade strength."
+    add_table(slide, 0.72, 1.34, 11.88, 2.54, mechanism_rows,
+              [2.65, 3.25, 4.10], font_size=9.0, first_col_left=True,
+              highlight_rows={1: LIGHT_BLUE, 2: LIGHT_ORANGE, 3: LIGHT_GREEN})
+    add_text(slide, 0.80, 4.16, 2.25, 0.30, "PROPOSED ENERGY PARTITION", 8.7, BLUE, True, margin=0)
+    add_rect(slide, 0.80, 4.50, 7.32, 0.82, WHITE, NAVY, radius=False, line_width=0.8)
+    add_text(slide, 1.06, 4.68, 6.80, 0.40,
+             "Eᵢₘₚ = Eₘₐₜᵣᵢₓ + Ecrush + Edebond/pull-out + Efracture + Eresidual",
+             16.0, NAVY, True, FONT_HEAD, align=PP_ALIGN.CENTER, margin=0)
+    add_rect(slide, 8.40, 4.16, 4.12, 1.16, LIGHT_CYAN, TEAL, radius=False, line_width=0.7)
+    add_text(slide, 8.65, 4.36, 3.62, 0.76,
+             "System-level hypothesis\nMore absorbed energy + controlled deformation → lower force-transmission potential",
+             10.0, NAVY, True, align=PP_ALIGN.CENTER, margin=0, line_spacing=1.0)
+    thesis = ("Inventive thesis: the specific material combination creates a semi-energy-absorbing rigid barrier while retaining structural-grade strength."
               if internal else
-              "Technology thesis: a semi-energy-absorbing rigid barrier that shifts part of the collision response from brittle fracture to controlled internal dissipation.")
-    add_text(slide, 1.07, 5.68, 11.05, 0.38, thesis, 11.3, NAVY, True, margin=0)
-    add_source(slide, 0.82, 6.47, 11.55,
-               "Inventor disclosure (16 Jul 2026), §§Description/Novelty/Inventiveness; Wang & Wang (2013); Nadesan & Dinakar (2017); Sahoo et al. (2020). Mechanism diagram is an author synthesis.")
+              "Technology thesis: an integrated material architecture creates a semi-energy-absorbing rigid barrier while retaining structural-grade strength.")
+    add_rect(slide, 0.80, 5.64, 11.72, 0.58, LIGHT_BLUE, BLUE, radius=False, line_width=0.6)
+    add_text(slide, 1.02, 5.79, 11.28, 0.29, thesis, 10.3, NAVY, True, margin=0)
+    add_rect(slide, 0.80, 6.30, 11.72, 0.35, WHITE, RED, radius=False, line_width=0.6)
+    add_text(slide, 1.02, 6.38, 11.28, 0.19,
+             "Lower transmitted force is a mechanistic hypothesis; vehicle-level force, ASI and THIV remain unmeasured.",
+             8.4, RED, True, margin=0)
+    add_source(slide, 0.82, 6.69, 11.55,
+               "Inventor disclosure (16 Jul 2026); Wang & Wang (2013); Nadesan & Dinakar (2017); Sahoo et al. (2020). Energy-partition model is an author synthesis.")
     mechanism_detail = ("First, the porous SFA can crush locally and contribute internal damping. Second, hooked-end steel fibres bridge cracks and dissipate energy through progressive debonding, friction and pull-out. Third, the cement–GGBS matrix provides the structural-grade load path and transfers stress into the aggregate and fibres."
                         if internal else
                         "First, a porous lightweight phase can crush locally and contribute internal damping. Second, a discrete crack-bridging phase dissipates energy through progressive debonding, friction and pull-out. Third, a structural matrix maintains the load path. Exact constituent identity and proportions are redacted.")
@@ -783,36 +798,44 @@ MECHANISM — approximately 80 seconds
 
 def slide_program(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Evidence ladder: from constituents to a scaled barrier", "Experimental programme", 6, status)
-    constituent_desc = ("XRF, physical properties, SFA absorption, fibre geometry" if internal
-                        else "Chemistry, physical properties and reinforcement quality")
-    screening_desc = ("NWC + 4 LWC variants; 0–1.5% fibre by volume" if internal
-                      else "NWC + 4 lightweight variants; increasing reinforcement")
+    add_header(slide, "Experimental programme and evidence hierarchy", "Methods overview", 6, status)
+    constituent_desc = ("XRF; physical properties; SFA absorption; fibre geometry" if internal
+                        else "Chemistry; physical properties; reinforcement quality")
+    screening_desc = ("NWC + four LWC variants; 0–1.5% fibre by volume" if internal
+                      else "NWC + four lightweight variants; increasing reinforcement")
     steps = [
-        ("01", "Constituent\ncharacterisation", constituent_desc, BLUE),
-        ("02", "Mixture\nscreening", screening_desc, CYAN),
-        ("03", "Static\nperformance", "Reported density, slump, 28 d compression and split tension", TEAL),
-        ("04", "Repeated\nimpact", "13.5 kg drop hammer; N₁/N₂, energy, acceleration → displacement", ORANGE),
-        ("05", "Barrier-scale\nvalidation", "1:3 New Jersey models; 40 kg pendulum; NWC vs LWC15", RED),
+        ("1", "Materials", constituent_desc),
+        ("2", "Mix design", screening_desc),
+        ("3", "Static tests", "Slump; reported density; 28 d compression and split tension"),
+        ("4", "Prism impact", "13.5 kg drop mass; N₁/N₂; acceleration-derived displacement"),
+        ("5", "Barrier model", "1:3 New Jersey geometry; 40 kg pendulum; NWC vs selected LWC"),
     ]
-    for i, (n, title, body, col) in enumerate(steps):
-        x = 0.70 + i*2.48
-        add_circle_label(slide, x + 0.78, 1.42, 0.54, n, col, WHITE, 10)
+    for i, (n, title, body) in enumerate(steps):
+        x = 0.70 + i*2.47
+        add_rect(slide, x, 1.43, 2.12, 1.86, WHITE, GRID, radius=False, line_width=0.7)
+        add_rect(slide, x, 1.43, 2.12, 0.34, NAVY, NAVY, radius=False, line_width=0)
+        add_text(slide, x + 0.10, 1.50, 0.28, 0.20, n, 8.7, WHITE, True,
+                 align=PP_ALIGN.CENTER, margin=0)
+        add_text(slide, x + 0.42, 1.49, 1.58, 0.22, title.upper(), 8.3, WHITE, True, margin=0)
+        add_text(slide, x + 0.16, 1.95, 1.80, 1.05, body, 9.0, INK,
+                 align=PP_ALIGN.CENTER, valign=MSO_VERTICAL_ANCHOR.MIDDLE, margin=0)
         if i < 4:
-            add_chevron(slide, x + 2.12, 1.51, 0.33, 0.34, GRID)
-        add_rect(slide, x, 2.12, 2.18, 2.34, WHITE, GRID, radius=True)
-        add_text(slide, x + 0.15, 2.33, 1.88, 0.68, title, 13.0, INK, True, FONT_HEAD,
-                 align=PP_ALIGN.CENTER, margin=0)
-        add_line(slide, x + 0.25, 3.08, x + 1.93, 3.08, col, 2.1)
-        add_text(slide, x + 0.18, 3.30, 1.82, 0.90, body, 9.4, MUTED, False,
-                 align=PP_ALIGN.CENTER, margin=0)
-    add_rect(slide, 0.82, 4.88, 11.60, 1.15, WHITE, GRID, radius=True)
-    add_text(slide, 1.03, 5.12, 2.25, 0.30, "REPLICATION / UNCERTAINTY", 9.0, RED, True, margin=0)
-    add_text(slide, 3.18, 5.02, 8.95, 0.70,
-             "The methods report 3 cubes + 3 cylinders per mix and 4 beams cast per mix; impact tables do not report dispersion for N₁/N₂. Barrier validation used one specimen per material. Treat barrier-scale effect sizes as preliminary, not population estimates.",
-             10.7, INK, True, margin=0)
-    add_source(slide, 0.82, 6.35, 11.65,
-               "Al-Amir et al. manuscript, Experimental Program and Testing Methods; inventor disclosure, Experimental Data Analysis. Sample-count interpretation is based on the stated casting plan.")
+            add_chevron(slide, x + 2.15, 2.14, 0.28, 0.32, GRID)
+    evidence_rows = [
+        ["Evidence level", "Specimens / comparison", "Primary response", "Interpretive limitation"],
+        ["Material", "Five concrete mixtures", "Density, fᶜ, fₜ", "Density terminology unresolved"],
+        ["Repeated impact", "Four beams reportedly cast per mix", "N₁, N₂, E₁, E₂, displacement", "N₁/N₂ dispersion not reported"],
+        ["Barrier scale", "1 NWC + 1 selected LWC", "Failure blows, E₂, deformation, debris", "Preliminary; no population inference"],
+    ]
+    add_table(slide, 0.80, 3.67, 11.72, 2.15, evidence_rows,
+              [1.55, 2.75, 3.10, 3.05], font_size=8.6, first_col_left=True,
+              highlight_rows={3: LIGHT_RED})
+    add_rect(slide, 0.80, 5.98, 11.72, 0.46, LIGHT_RED, RED, radius=False, line_width=0.6)
+    add_text(slide, 1.02, 6.09, 11.28, 0.23,
+             "Statistical boundary: reported ratios are experimental observations; barrier-scale confidence intervals cannot be inferred from n = 1.",
+             8.8, RED, True, margin=0)
+    add_source(slide, 0.82, 6.57, 11.65,
+               "Al-Amir et al. manuscript, Experimental Program and Testing Methods; sample-count interpretation follows the stated casting plan.")
     screening_note = ("Four lightweight mixtures were evaluated with fibre volume increasing from zero to 1.5%, alongside an M40 normal-weight reference."
                       if internal else
                       "Four lightweight variants with progressively increasing crack-bridging reinforcement were evaluated alongside an M40 normal-weight reference; exact proportions are redacted.")
@@ -829,7 +852,7 @@ EXPERIMENTAL LOGIC — approximately 75 seconds
 
 def slide_mix(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Tested material design: a fibre-content performance ladder", "Tested embodiments", 7, status)
+    add_header(slide, "Experimental mixture matrix and selected embodiment", "Mixture design", 7, status)
     if internal:
         rows = [["Mix", "OPC", "GGBS", "Water", "Fine agg.", "Nat. coarse", "SFA", "Steel fibre", "PCE"]]
         for mix in MIXES:
@@ -851,16 +874,19 @@ def slide_mix(prs, internal):
         ]
         add_table(slide, 0.72, 1.45, 8.80, 2.80, rows, [1.05, 1.15, 1.55, 1.95, 1.30],
                   font_size=9.0, first_col_left=True, highlight_rows={2: LIGHT_CYAN})
-        add_rect(slide, 0.75, 4.60, 8.75, 0.92, LIGHT_RED, LIGHT_RED, radius=True, line_width=0)
+        add_rect(slide, 0.75, 4.60, 8.75, 0.92, LIGHT_RED, RED, radius=False, line_width=0.6)
         add_text(slide, 0.98, 4.80, 8.30, 0.45,
                  "Formulation proportions, moisture-conditioning protocol and constituent specifications are redacted. Release only after patent filing and IITBBS IP approval.",
                  10.0, RED, True, margin=0)
         right_title = "SELECTED TECHNOLOGY EMBODIMENT"
         body = "• Structural lightweight design target\n• Industrial by-product aggregate pathway\n• Lower-clinker binder pathway\n• Discrete crack-bridging reinforcement\n• Reported density below 2,000 kg/m³\n• 28 d strength above M40 requirement"
-    add_rect(slide, 9.78, 1.34, 2.60, 4.72, NAVY, NAVY, radius=True, line_width=0)
-    add_text(slide, 10.02, 1.67, 2.14, 0.66, right_title, 10.6, CYAN, True, margin=0)
-    add_text(slide, 10.02, 2.54, 2.10, 2.95, body, 10.0, WHITE, False, margin=0, line_spacing=1.1)
-    add_pill(slide, 10.02, 5.45, 2.04, "SCALed barrier mix", "173D55", CYAN, 8.8, "173D55")
+    add_rect(slide, 9.78, 1.34, 2.60, 4.72, WHITE, NAVY, radius=False, line_width=0.8)
+    add_rect(slide, 9.78, 1.34, 2.60, 0.10, NAVY, NAVY, radius=False, line_width=0)
+    add_text(slide, 10.00, 1.66, 2.16, 0.66, right_title, 10.4, NAVY, True, FONT_HEAD, margin=0)
+    add_text(slide, 10.00, 2.45, 2.16, 2.95, body, 9.4, INK, False, margin=0, line_spacing=1.05)
+    add_rect(slide, 10.00, 5.46, 2.16, 0.34, LIGHT_BLUE, BLUE, radius=False, line_width=0.5)
+    add_text(slide, 10.06, 5.53, 2.04, 0.20, "MIX USED FOR BARRIER MODEL", 7.8, BLUE, True,
+             align=PP_ALIGN.CENTER, margin=0)
     add_source(slide, 0.74, 6.34, 11.65,
                "Al-Amir et al. manuscript, Tables 4–6 and chart caches. Density terminology retained as “reported density”; the source alternates between wet and dry density. Exact extra-water protocol omitted by user instruction.")
     if internal:
@@ -888,7 +914,7 @@ TESTED EMBODIMENTS — approximately 60 seconds
 
 def slide_static(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Static performance clears the structural gate", "Measured performance", 8, status)
+    add_header(slide, "Reported density and 28-day mechanical performance", "Material results", 8, status)
     add_column_chart(slide, 0.72, 1.44, 3.75, 3.78, MIXES, [("Reported density", DENSITY)],
                      [BLUE], 2700, "0", False, True, "kg/m³", 62, "Reported density")
     add_column_chart(slide, 4.78, 1.44, 3.75, 3.78, MIXES, [("Compression", COMP)],
@@ -898,7 +924,7 @@ def slide_static(prs, internal):
     add_pill(slide, 0.84, 5.49, 2.65, f"LWC15 density −{DENSITY_REDUCTION*100:.1f}%", LIGHT_BLUE, BLUE, 9.2)
     add_pill(slide, 4.93, 5.49, 2.65, f"LWC10 max = {max(COMP):.1f} MPa", LIGHT_GREEN, GREEN, 9.2)
     add_pill(slide, 8.99, 5.49, 2.65, f"LWC15 tension +{TENSILE_GAIN*100:.0f}%", LIGHT_ORANGE, ORANGE, 9.2)
-    add_rect(slide, 0.85, 5.96, 11.47, 0.38, LIGHT_RED, LIGHT_RED, radius=True, line_width=0)
+    add_rect(slide, 0.85, 5.96, 11.47, 0.38, LIGHT_RED, RED, radius=False, line_width=0.5)
     add_text(slide, 1.03, 6.05, 11.05, 0.21,
              "Workability trade-off: slump fell from 165 mm (LWC00) to 87 mm (LWC15); fibre dispersion and compaction are scale-up control points.",
              8.8, RED, True, margin=0)
@@ -917,32 +943,38 @@ STATIC RESULTS — approximately 75 seconds
 
 def slide_prism_method(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Repeated-impact method captures post-cracking endurance", "Impact methodology", 9, status)
-    add_picture_contain(slide, MEDIA / "image5.jpeg", 0.73, 1.37, 5.02, 3.72, "drop_weight_setup_contain")
-    add_rect(slide, 0.89, 4.43, 4.70, 0.48, NAVY, NAVY, radius=True, line_width=0)
-    add_text(slide, 1.05, 4.54, 4.35, 0.24, "100 × 100 × 500 mm beam  •  400 mm support span", 9.1, WHITE, True,
-             align=PP_ALIGN.CENTER, margin=0)
-    # Technical parameter cards.
-    params = [("13.5 kg", "drop mass"), ("100 mm", "drop height"), ("13.24 J", "energy / blow"), ("N₁ / N₂", "first crack / failure")]
-    for i, (v, lab) in enumerate(params):
-        x = 6.06 + (i % 2)*3.07; y = 1.43 + (i // 2)*1.30
-        add_metric(slide, x, y, 2.78, 1.07, v, lab, [BLUE, CYAN, ORANGE, RED][i], WHITE, 20)
-    add_rect(slide, 6.06, 4.18, 5.84, 1.27, WHITE, GRID, radius=True)
-    add_text(slide, 6.28, 4.40, 1.86, 0.34, "SIGNAL PIPELINE", 9.0, BLUE, True, margin=0)
-    pipeline = ["detrend", "4th-order zero-phase\nHP filter, 3 Hz", "integrate → v", "drift correct", "integrate → x"]
+    add_header(slide, "Repeated-impact test and signal-processing method", "Impact methodology", 9, status)
+    add_rect(slide, 0.72, 1.34, 5.12, 4.72, WHITE, GRID, radius=False, line_width=0.7)
+    add_picture_contain(slide, MEDIA / "image5.jpeg", 0.83, 1.45, 4.90, 4.22, "drop_weight_setup_contain")
+    add_text(slide, 0.91, 5.72, 4.74, 0.24,
+             "Figure 4. Repeated drop-weight impact apparatus for prismatic beams",
+             8.2, NAVY, True, align=PP_ALIGN.CENTER, margin=0)
+    method_rows = [
+        ["Parameter", "Specified value"],
+        ["Beam geometry", "100 × 100 × 500 mm"],
+        ["Support span", "400 mm"],
+        ["Drop mass, m", "13.5 kg"],
+        ["Drop height, h", "100 mm"],
+        ["Energy per blow, mgh", "13.24 J"],
+        ["Recorded endpoints", "N₁ first crack; N₂ failure"],
+    ]
+    add_table(slide, 6.12, 1.38, 6.20, 2.66, method_rows,
+              [2.45, 3.25], font_size=9.2, first_col_left=True)
+    add_rect(slide, 6.12, 4.25, 6.20, 0.67, LIGHT_ORANGE, ORANGE, radius=False, line_width=0.7)
+    add_text(slide, 6.38, 4.39, 5.68, 0.38,
+             "E₁ = N₁mgh   |   E₂ = N₂mgh   |   ΔNpost = N₂ − N₁",
+             12.2, NAVY, True, FONT_HEAD, align=PP_ALIGN.CENTER, margin=0)
+    add_text(slide, 6.12, 5.13, 1.58, 0.26, "SIGNAL PROCESSING", 8.5, BLUE, True, margin=0)
+    pipeline = ["detrend", "4th-order zero-phase\nHP filter, 3 Hz", "∫a dt → v", "drift correction", "∫v dt → x"]
     for i, txt in enumerate(pipeline):
-        x = 7.52 + i*0.89
-        add_rect(slide, x, 4.31, 0.74, 0.72, LIGHT_BLUE if i % 2 == 0 else LIGHT_CYAN,
-                 LIGHT_BLUE if i % 2 == 0 else LIGHT_CYAN, radius=True, line_width=0)
-        add_text(slide, x + 0.03, 4.45, 0.68, 0.42, txt, 7.4, NAVY, True,
+        x = 6.12 + i*1.24
+        add_rect(slide, x, 5.47, 1.05, 0.62, LIGHT_BLUE if i % 2 == 0 else LIGHT_CYAN,
+                 GRID, radius=False, line_width=0.5)
+        add_text(slide, x + 0.04, 5.57, 0.97, 0.42, txt, 7.5, NAVY, True,
                  align=PP_ALIGN.CENTER, valign=MSO_VERTICAL_ANCHOR.MIDDLE, margin=0)
-        if i < 4: add_chevron(slide, x + 0.73, 4.50, 0.16, 0.24, GRID)
-    add_rect(slide, 6.06, 5.67, 5.84, 0.50, LIGHT_ORANGE, LIGHT_ORANGE, radius=True, line_width=0)
-    add_text(slide, 6.27, 5.78, 5.42, 0.26,
-             "Energy metric = mgh × number of blows; repeated impact emphasizes residual toughness.",
-             9.2, INK, True, margin=0)
-    add_source(slide, 0.73, 6.43, 11.65,
-               "Experimental photo: inventor-supplied manuscript Fig. 4. Method: ACI 544.2R-89 adapted to prismatic beams; manuscript Testing Methods, Eqs. 1–2 and signal-processing description.")
+        if i < 4: add_chevron(slide, x + 1.07, 5.66, 0.14, 0.24, GRID)
+    add_source(slide, 0.73, 6.48, 11.65,
+               "Inventor-supplied manuscript Fig. 4; ACI 544.2R-89 adapted to prismatic beams; manuscript Testing Methods, Eqs. 1–2 and signal-processing description.")
     add_notes(slide, """
 REPEATED-IMPACT METHOD — approximately 75 seconds
 
@@ -957,8 +989,8 @@ REPEATED-IMPACT METHOD — approximately 75 seconds
 def slide_prism_results(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
     add_header(slide,
-               "Steel fibres transform post-cracking impact endurance" if internal else
-               "Crack-bridging reinforcement transforms post-cracking endurance",
+               "Effect of steel-fibre dosage on repeated-impact endurance" if internal else
+               "Effect of reinforcement level on repeated-impact endurance",
                "Prism impact results", 10, status)
     add_bar_chart(slide, 0.73, 1.40, 6.02, 4.55, MIXES, PRISM_E2, BLUE, "0", 3300,
                   "Failure energy, E₂ (N·m)", [GRID, "9ABFD1", CYAN, ORANGE, RED])
@@ -984,7 +1016,7 @@ PRISM IMPACT RESULTS — approximately 80 seconds
 
 def slide_deformation(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Deformation reveals the transition from brittle to ductile response", "Dynamic response", 11, status)
+    add_header(slide, "First-impact displacement and inferred dissipation mechanisms", "Dynamic response", 11, status)
     add_column_chart(slide, 0.73, 1.42, 5.38, 4.35, MIXES, [("Peak displacement", DISP)],
                      [ORANGE], 1.0, "0.00", False, True, "mm", 60, "Peak displacement after first impact")
     # Mechanism illustration. The external deck replaces constituent photos with
@@ -999,7 +1031,7 @@ def slide_deformation(prs, internal):
         generic = [(6.42, 1.58, LIGHT_BLUE, BLUE, "POROUS\nPHASE"),
                    (8.23, 1.58, LIGHT_ORANGE, ORANGE, "BRIDGING\nPHASE")]
         for x, w, fill, col, txt in generic:
-            add_rect(slide, x, 1.48, w, 1.26, fill, fill, radius=True, line_width=0)
+            add_rect(slide, x, 1.48, w, 1.26, fill, GRID, radius=False, line_width=0.5)
             add_circle_label(slide, x + w/2 - 0.24, 1.69, 0.48, "●", col, WHITE, 10)
             add_text(slide, x + 0.10, 2.25, w - 0.20, 0.34, txt, 8.4, col, True,
                      align=PP_ALIGN.CENTER, margin=0)
@@ -1011,18 +1043,16 @@ def slide_deformation(prs, internal):
         add_text(slide, x, 2.83, w, 0.36, txt, 9.3, col, True, align=PP_ALIGN.CENTER, margin=0)
     add_chevron(slide, 7.96, 1.90, 0.24, 0.34, GRID)
     add_chevron(slide, 9.77, 1.90, 0.24, 0.34, GRID)
-    add_rect(slide, 6.42, 3.45, 5.77, 2.06, NAVY, NAVY, radius=True, line_width=0)
-    mech = [
-        ("Crush", "porous aggregate consumes local energy"),
-        ("Bridge", "fibres transfer stress across opening cracks"),
-        ("Pull out", "friction extends the failure process"),
-        ("Hold", "reinforcement restrains large fragments"),
+    mechanism_rows = [
+        ["Mechanism", "Physical interpretation"],
+        ["Aggregate / porous-phase crushing", "Local deformation and energy dissipation"],
+        ["Crack bridging", "Stress transfer across opening cracks"],
+        ["Debonding and pull-out", "Frictional work extends failure process"],
+        ["Fragment restraint", "Improved residual integrity and smaller debris"],
     ]
-    for i, (a, b) in enumerate(mech):
-        x = 6.72 + (i % 2)*2.72; y = 3.76 + (i // 2)*0.77
-        add_text(slide, x, y, 0.80, 0.30, a.upper(), 8.6, CYAN, True, margin=0)
-        add_text(slide, x + 0.78, y - 0.01, 1.70, 0.46, b, 8.6, WHITE, False, margin=0)
-    add_rect(slide, 0.89, 5.87, 11.30, 0.38, LIGHT_RED, LIGHT_RED, radius=True, line_width=0)
+    add_table(slide, 6.42, 3.43, 5.77, 2.08, mechanism_rows,
+              [2.20, 3.35], font_size=8.6, first_col_left=True)
+    add_rect(slide, 0.89, 5.87, 11.30, 0.38, LIGHT_RED, RED, radius=False, line_width=0.5)
     add_text(slide, 1.06, 5.96, 10.96, 0.21,
              "LWC10 has the highest first-impact displacement (0.85 mm); LWC15 is slightly stiffer (0.71 mm) yet vastly more durable under repeated impact.",
              8.9, RED, True, margin=0)
@@ -1044,17 +1074,20 @@ DEFORMATION AND MECHANISM — approximately 75 seconds
 
 def slide_economics(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "The optimum is expensive per m³—but efficient per absorbed joule", "Techno-economics", 12, status)
-    add_column_chart(slide, 0.74, 1.47, 5.62, 4.25, MIXES, [("Material cost", COST)],
+    add_header(slide, "Material cost and laboratory impact-energy efficiency", "Techno-economics", 12, status)
+    add_column_chart(slide, 0.74, 1.47, 5.62, 3.82, MIXES, [("Material cost", COST)],
                      [NAVY], 18000, "₹#,##0", False, True, "₹/m³", 58, "Material cost")
-    add_column_chart(slide, 6.76, 1.47, 5.62, 4.25, MIXES, [("Cost / failure energy", COST_E)],
+    add_column_chart(slide, 6.76, 1.47, 5.62, 3.82, MIXES, [("Cost / failure energy", COST_E)],
                      [ORANGE], 185, "0.00", False, True, "₹/(N·m)", 58, "Laboratory cost / impact energy")
-    add_pill(slide, 0.94, 5.72, 2.50, f"LWC15 cost = {COST[-1]/COST[0]:.2f}× NWC", LIGHT_RED, RED, 9.1)
-    add_pill(slide, 3.75, 5.72, 2.25,
-             "Steel fibre dominates cost" if internal else "Reinforcement dominates cost",
-             LIGHT_ORANGE, ORANGE, 9.1)
-    add_pill(slide, 7.02, 5.72, 2.68, f"Unit impact value = {COST_ENERGY_GAIN:.1f}× better", LIGHT_CYAN, TEAL, 9.1)
-    add_pill(slide, 10.00, 5.72, 2.10, "₹5.53 per N·m", LIGHT_BLUE, BLUE, 9.1)
+    selected_label = "LWC15" if internal else "Selected LWC"
+    efficiency_rows = [
+        ["Metric", "NWC", selected_label, "Comparison"],
+        ["Material cost", f"₹{COST[0]:,.0f}/m³", f"₹{COST[-1]:,.0f}/m³", f"{COST[-1]/COST[0]:.2f}× higher"],
+        ["Cost / prism E₂", f"₹{COST_E[0]:.2f}/(N·m)", f"₹{COST_E[-1]:.2f}/(N·m)", f"{COST_ENERGY_GAIN:.1f}× lower unit cost"],
+    ]
+    add_table(slide, 0.92, 5.50, 11.18, 0.86, efficiency_rows,
+              [2.35, 2.25, 2.25, 3.15], font_size=7.9, first_col_left=True,
+              highlight_rows={2: LIGHT_CYAN})
     add_source(slide, 0.74, 6.43, 11.65,
                "Inventor dataset, manuscript Tables 7 and 10. Local material prices × mix quantities; cost/energy uses prism E₂. Excludes labour, transport, curing, reinforcement, fabrication, repair, service life, inflation and test uncertainty.")
     cost_driver = ("the high steel-fibre dosage" if internal else "the high reinforcement dosage")
@@ -1071,17 +1104,19 @@ TECHNO-ECONOMIC RESULT — approximately 80 seconds
 
 def slide_barrier_method(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Application-scale test: 1:3 New Jersey barrier under pendulum impact", "Scaled validation", 13, status)
+    add_header(slide, "One-third-scale New Jersey barrier: geometry and impact protocol", "Scaled validation", 13, status)
     add_picture_contain(slide, MEDIA / "image6.png", 0.72, 1.34, 5.65, 3.82, "barrier_geometry_contain")
     add_picture_contain(slide, MEDIA / "image8.jpeg", 6.67, 1.34, 5.65, 3.82, "pendulum_setup_contain")
     add_text(slide, 0.92, 4.77, 5.25, 0.29, "Full-scale and 1:3 cross-section / reinforcement geometry", 8.5, INK, True,
              align=PP_ALIGN.CENTER, margin=0)
     add_text(slide, 6.87, 4.77, 5.25, 0.29, "Pendulum rig: restrained specimen; rear-face accelerometer", 8.5, INK, True,
              align=PP_ALIGN.CENTER, margin=0)
-    vals = [("40 kg", "impactor"), ("0.35 m", "vertical rise"), ("≈137.3 J", "energy / blow"), ("1 each", "barrier / mix")]
-    for i, (v, lab) in enumerate(vals):
-        x = 0.84 + i*2.93
-        add_metric(slide, x, 5.30, 2.60, 0.88, v, lab, [BLUE, CYAN, ORANGE, RED][i], WHITE, 17)
+    protocol_rows = [
+        ["Scale", "Impactor mass", "Vertical rise", "Energy per blow", "Comparison / replication"],
+        ["1:3 geometric model", "40 kg", "0.35 m", "≈137.3 J", "1 NWC and 1 selected LWC barrier"],
+    ]
+    add_table(slide, 0.84, 5.30, 11.48, 0.84, protocol_rows,
+              [1.75, 1.45, 1.45, 1.65, 3.50], font_size=8.5)
     add_source(slide, 0.73, 6.42, 11.65,
                "Inventor-supplied manuscript Figs. 5–7; Testing Methods. Geometry scaled 1:3 using dimensional similarity; energy per blow = 40 × 9.81 × 0.35 ≈ 137.3 J. One NWC and one LWC15 barrier were tested.")
     add_notes(slide, """
@@ -1098,16 +1133,23 @@ SCALED BARRIER TEST — approximately 80 seconds
 
 def slide_barrier_results(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Scaled-barrier validation preserves the direction of benefit", "Barrier results", 14, status)
+    add_header(slide, "Scaled-barrier impact response and failure morphology", "Barrier results", 14, status)
     add_picture_contain(slide, MEDIA / "image16.jpeg", 0.72, 1.37, 5.70, 4.53, "barrier_failure_contain")
     add_column_chart(slide, 6.75, 1.40, 2.77, 3.15, BARRIER_MIXES, [("Failure energy", BARRIER_E2)],
                      [RED], 3100, "0", False, True, "N·m", 55, "Energy to failure")
     add_column_chart(slide, 9.78, 1.40, 2.77, 3.15, BARRIER_MIXES, [("Deformation", BARRIER_DEF)],
                      [ORANGE], 15, "0.00", False, True, "mm", 55, "Peak deformation")
-    add_metric(slide, 6.75, 4.82, 1.78, 1.12, f"{BARRIER_ENERGY_GAIN:.1f}×", "failure energy", RED, WHITE, 20)
-    add_metric(slide, 8.66, 4.82, 1.78, 1.12, f"{BARRIER_DEF_GAIN:.2f}×", "deformation", ORANGE, WHITE, 20)
-    add_metric(slide, 10.57, 4.82, 1.98, 1.12, "20 vs 10", "blows to failure", TEAL, WHITE, 20)
-    add_rect(slide, 0.82, 6.02, 11.65, 0.35, LIGHT_RED, LIGHT_RED, radius=True, line_width=0)
+    selected_label = "LWC15" if internal else "Selected LWC"
+    barrier_rows = [
+        ["Response", "NWC", selected_label, "Observed ratio"],
+        ["Blows to failure, N₂", "10", "20", "2.00×"],
+        ["Failure energy, E₂", "1,373 N·m", "2,746 N·m", f"{BARRIER_ENERGY_GAIN:.1f}×"],
+        ["Peak deformation", "4.22 mm", "12.70 mm", f"{BARRIER_DEF_GAIN:.2f}×"],
+    ]
+    add_table(slide, 6.75, 4.80, 5.80, 1.12, barrier_rows,
+              [1.75, 1.25, 1.35, 1.20], font_size=7.7, first_col_left=True,
+              highlight_rows={2: LIGHT_CYAN})
+    add_rect(slide, 0.82, 6.02, 11.65, 0.35, LIGHT_RED, RED, radius=False, line_width=0.5)
     add_text(slide, 1.00, 6.10, 11.25, 0.20,
              "Fragmentation observation is qualitative: LWC15 showed finer, more distributed debris; particle-size/mass and ejection-velocity measurements are still required.",
              8.6, RED, True, margin=0)
@@ -1126,7 +1168,7 @@ BARRIER RESULTS — approximately 90 seconds
 
 def slide_evidence_claims(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Measured evidence maps to a layered patent strategy", "IP evidence map", 15, status)
+    add_header(slide, "Evidence-to-claim support matrix", "IPR technical assessment", 15, status)
     rows = [
         ["Evidence", "Observed LWC15 result", "Supports", "Confidence"],
         ["Reported density", f"{DENSITY[-1]:,.0f} kg/m³; −{DENSITY_REDUCTION*100:.1f}% vs NWC", "Lightweight article / transport value", "Medium*"],
@@ -1138,33 +1180,30 @@ def slide_evidence_claims(prs, internal):
     ]
     add_table(slide, 0.72, 1.32, 7.45, 4.65, rows, [1.55, 2.35, 2.15, 1.05], font_size=8.6,
               first_col_left=True, highlight_rows={4: LIGHT_ORANGE, 5: LIGHT_CYAN})
-    # Claim stack.
-    add_rect(slide, 8.47, 1.33, 3.92, 4.65, NAVY, NAVY, radius=True, line_width=0)
-    add_text(slide, 8.78, 1.63, 3.28, 0.40,
-             "ILLUSTRATIVE CLAIM STACK" if internal else "PROTECTABLE VALUE STACK",
-             10.2, CYAN, True, margin=0)
     if internal:
-        claims = [
-            ("A", "Composition", "OPC / GGBS / SFA / hooked-fibre ranges"),
-            ("B", "Process", "conditioning, sequence, dispersion and QC"),
-            ("C", "Barrier article", "profile + reinforcement + invented concrete"),
-            ("D", "Performance", "density / strength / impact / damage envelope"),
-            ("E", "System use", "precast transport-safety applications"),
+        claim_rows = [
+            ["Claim family", "Technical basis in current record"],
+            ["Composition", "OPC/GGBS/SFA/hooked-fibre ranges and tested embodiments"],
+            ["Manufacturing process", "Moisture conditioning, mixing sequence, dispersion and QC"],
+            ["Barrier article", "New Jersey profile + reinforcement + invented concrete"],
+            ["Performance-linked", "Density, strength, impact endurance and damage-control envelope"],
+            ["System / use", "Precast transport-safety and protective-infrastructure applications"],
         ]
     else:
-        claims = [
-            ("A", "Material platform", "integrated lightweight energy-dissipation system"),
-            ("B", "Manufacturing know-how", "controlled processing and quality assurance"),
-            ("C", "Barrier embodiment", "application-specific structural article"),
-            ("D", "Performance envelope", "strength, impact endurance and damage control"),
-            ("E", "Deployment package", "precast production and field implementation"),
+        claim_rows = [
+            ["Protectable layer", "Technical basis in current record"],
+            ["Material platform", "Integrated lightweight energy-dissipation architecture"],
+            ["Manufacturing know-how", "Controlled processing and quality-assurance protocol"],
+            ["Barrier embodiment", "Application-specific structural article"],
+            ["Performance envelope", "Strength, impact endurance and controlled damage"],
+            ["Deployment package", "Precast production and field implementation"],
         ]
-    for i, (letter, title, body) in enumerate(claims):
-        y = 2.19 + i*0.67
-        add_circle_label(slide, 8.80, y, 0.38, letter, [BLUE, CYAN, TEAL, ORANGE, RED][i], WHITE, 9)
-        add_text(slide, 9.30, y - 0.01, 1.12, 0.27, title, 9.4, WHITE, True, margin=0)
-        add_text(slide, 10.43, y - 0.03, 1.59, 0.42, body, 7.9, "C4D4DC", margin=0)
-    add_text(slide, 8.78, 5.56, 3.25, 0.30, "* Density basis must be corrected.", 7.8, ORANGE, True, margin=0)
+    add_table(slide, 8.45, 1.32, 4.12, 4.65, claim_rows,
+              [1.55, 2.45], font_size=8.1, first_col_left=True,
+              highlight_rows={4: LIGHT_ORANGE})
+    add_text(slide, 8.55, 6.03, 3.90, 0.24,
+             "* Correct density basis and water protocol before claim drafting.",
+             7.8, RED, True, margin=0)
     add_source(slide, 0.73, 6.35, 11.65,
                "Evidence: inventor dataset. Claim structure is a technical drafting aid only—not legal advice. Patentability/FTO requires professional searching, claim construction and jurisdiction-specific counsel.")
     if internal:
@@ -1194,39 +1233,25 @@ EVIDENCE-TO-VALUE MAP — approximately 75 seconds
 
 def slide_translation(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "De-risking plan: convert a laboratory signal into a certifiable product", "Translation roadmap", 16, status)
-    phases = [
-        ("NOW", "Protect", "File before disclosure; professional search; lock data provenance", BLUE),
-        ("0–6 m", "Reproduce", "Resolve method conflicts; replicate barrier tests; quantify debris", CYAN),
-        ("6–12 m", "Model + age", "Calibrate FE; fatigue/repeat impact; chloride, fire and weather", TEAL),
-        ("12–24 m", "Full-scale certify", "Vehicle crash: containment, redirection, ASI/THIV and debris", ORANGE),
-        ("24–36 m", "Pilot + license", "Precast QA, field demonstration, LCA/TEA and partner transfer", RED),
+    add_header(slide, "Research gaps and staged validation plan", "Future work", 16, status)
+    validation_rows = [
+        ["Stage", "Research / IP question", "Method", "Decision criterion", "Indicative timing"],
+        ["1. Protect", "Is the integrated platform novel and enabled?", "Professional patent search; reconcile records; file", "IPR approval and filing", "Now"],
+        ["2. Reproduce", "Are effect sizes repeatable?", "Specimen-level repeats; ≥3 barriers/mix; debris quantification", "Uncertainty and effect-size bounds", "0–6 months"],
+        ["3. Mechanism + durability", "Does performance persist under ageing and repeated impact?", "FE calibration; fatigue; chloride; corrosion; fire/weather", "Validated model + durability envelope", "6–12 months"],
+        ["4. Vehicle-scale safety", "Does the system contain and redirect vehicles safely?", "Full-scale IRC / EN 1317 / MASH-aligned tests; ASI/THIV", "Containment, redirection and occupant-risk compliance", "12–24 months"],
+        ["5. Translation", "Is the system manufacturable and beneficial at installed scale?", "Precast QA; field pilot; comparative LCA and TEA", "Pilot readiness and licensing package", "24–36 months"],
     ]
-    for i, (time, title, body, col) in enumerate(phases):
-        x = 0.73 + i*2.46
-        add_text(slide, x, 1.36, 2.12, 0.28, time, 8.8, col, True, margin=0,
-                 align=PP_ALIGN.CENTER)
-        add_circle_label(slide, x + 0.80, 1.75, 0.52, str(i+1), col, WHITE, 10)
-        if i < 4:
-            add_line(slide, x + 1.32, 2.01, x + 2.47, 2.01, GRID, 2.1)
-        add_text(slide, x, 2.51, 2.12, 0.34, title, 12.5, INK, True, FONT_HEAD,
-                 align=PP_ALIGN.CENTER, margin=0)
-        add_text(slide, x + 0.06, 2.96, 2.00, 1.12, body, 9.0, MUTED, False,
-                 align=PP_ALIGN.CENTER, margin=0)
-    # Risk bar.
-    add_rect(slide, 0.75, 4.52, 11.82, 1.48, NAVY, NAVY, radius=True, line_width=0)
-    add_text(slide, 1.02, 4.80, 1.25, 0.30, "TOP RISKS", 9.2, CYAN, True, margin=0)
-    risks = [
-        "Full-scale vehicle response", "Fibre workability / balling" if internal else "Reinforcement workability",
-        "SFA moisture + variability" if internal else "Aggregate moisture + variability",
-        "Durability / corrosion", "Installed-system cost", "Patent landscape / disclosure timing"
-    ]
-    for i, r in enumerate(risks):
-        x = 2.26 + (i % 3)*3.29; y = 4.72 + (i // 3)*0.58
-        add_circle_label(slide, x, y + 0.01, 0.28, "!", RED, WHITE, 8)
-        add_text(slide, x + 0.39, y, 2.70, 0.34, r, 8.7, WHITE, True, margin=0)
-    add_source(slide, 0.73, 6.34, 11.65,
-               "Roadmap synthesizes inventor questionnaire/technology profile and validation gaps against IRC:119-2015, EN 1317/MASH-style evaluation principles, and peer-reviewed barrier crash-test literature. Indicative timing only.")
+    add_table(slide, 0.72, 1.32, 11.88, 4.74, validation_rows,
+              [1.10, 2.45, 3.20, 2.70, 1.25], font_size=7.8,
+              first_col_left=True, highlight_rows={1: LIGHT_BLUE, 4: LIGHT_ORANGE})
+    risk_text = ("Critical uncertainties: full-scale vehicle response • fibre workability/balling • SFA moisture/variability • corrosion • installed cost • disclosure timing"
+                 if internal else
+                 "Critical uncertainties: full-scale vehicle response • reinforcement workability • aggregate variability • corrosion • installed cost • disclosure timing")
+    add_rect(slide, 0.80, 6.18, 11.72, 0.40, LIGHT_RED, RED, radius=False, line_width=0.6)
+    add_text(slide, 1.00, 6.28, 11.32, 0.20, risk_text, 8.2, RED, True, margin=0)
+    add_source(slide, 0.73, 6.68, 11.65,
+               "Validation plan synthesizes the inventor questionnaire/technology profile with IRC:119-2015, EN 1317/MASH-style evaluation principles and barrier crash-test literature. Timing is indicative.")
     pilot_controls = ("precast quality controls, fibre-dispersion inspection, SFA moisture/specification limits"
                       if internal else
                       "precast quality controls and protected material/process acceptance limits")
@@ -1244,41 +1269,37 @@ TRANSLATION ROADMAP — approximately 90 seconds
 
 def slide_decision(prs, internal):
     slide = prs.slides.add_slide(prs.slide_layouts[6]); status = status_text(internal)
-    add_header(slide, "Decision request: approve patent filing and staged validation", "Recommendation", 17, status, dark=True)
-    add_text(slide, 0.75, 1.36, 7.65, 0.95,
-             "The evidence justifies IPR approval to proceed with a focused patent filing—\nnot yet a certified occupant-safety claim.",
-             23.0, WHITE, True, FONT_HEAD, margin=0, line_spacing=0.93)
-    # Big decision metrics.
-    vals = [(f"{PRISM_GAIN_NWC:.1f}×", "prism E₂ vs NWC", ORANGE),
-            (f"{BARRIER_ENERGY_GAIN:.1f}×", "scaled barrier E₂", RED),
-            (f"{COST_ENERGY_GAIN:.1f}×", "lab unit-impact value", CYAN)]
-    for i, (v, lab, col) in enumerate(vals):
-        x = 0.80 + i*2.55
-        add_rect(slide, x, 2.65, 2.28, 1.32, "0E3047", "20485F", radius=True, line_width=0.8)
-        add_text(slide, x + 0.17, 2.85, 1.94, 0.44, v, 24, col, True, FONT_HEAD, margin=0,
-                 align=PP_ALIGN.CENTER)
-        add_text(slide, x + 0.17, 3.40, 1.94, 0.28, lab, 8.9, "C3D5DD", True, margin=0,
-                 align=PP_ALIGN.CENTER)
-    add_rect(slide, 8.78, 1.36, 3.66, 4.87, WHITE, WHITE, radius=True, line_width=0)
-    add_text(slide, 9.10, 1.72, 3.00, 0.40, "IPR DECISIONS REQUESTED", 10.2, BLUE, True, margin=0)
-    asks = [
-        ("1", "Approve patent filing", "Authorize search, drafting and filing"),
-        ("2", "Maintain confidentiality", "Coordinate manuscript release after filing"),
-        ("3", "Endorse validation plan", "Replicates, debris metrics, FE and full-scale crash"),
-        ("4", "Enable technology transfer", "Controlled CRRI / NHAI / precast engagement"),
+    add_header(slide, "Conclusions and request to the IPR committee", "Conclusions", 17, status)
+    conclusion_rows = [
+        ["No.", "Conclusion from current evidence", "Quantitative basis"],
+        ["1", "The selected lightweight mixture clears the structural-strength gate.", f"55.4 MPa; reported density −{DENSITY_REDUCTION*100:.1f}% vs NWC"],
+        ["2", "Crack-bridging reinforcement primarily improves tensile and post-cracking response.", f"Split tension +{TENSILE_GAIN*100:.0f}%; prism E₂ {PRISM_GAIN_NWC:.1f}× NWC"],
+        ["3", "The one-third-scale barrier reproduces the direction of benefit.", f"E₂ {BARRIER_ENERGY_GAIN:.1f}×; deformation {BARRIER_DEF_GAIN:.2f}×; n = 1/mix"],
+        ["4", "Occupant-safety and certification claims remain outside the present evidence.", "No vehicle containment, redirection, ASI or THIV test"],
     ]
-    for i, (n, t, b) in enumerate(asks):
-        y = 2.31 + i*0.91
-        add_circle_label(slide, 9.10, y, 0.42, n, [BLUE, ORANGE, TEAL, RED][i], WHITE, 9)
-        add_text(slide, 9.66, y - 0.02, 2.48, 0.36, t, 9.4, INK, True, margin=0)
-        add_text(slide, 9.66, y + 0.34, 2.38, 0.38, b, 7.9, MUTED, margin=0)
-    add_rect(slide, 0.80, 4.42, 7.48, 1.28, "0E3047", "20485F", radius=True, line_width=0.8)
-    add_text(slide, 1.06, 4.70, 1.20, 0.30, "BOTTOM LINE", 9.0, CYAN, True, margin=0)
-    add_text(slide, 2.22, 4.61, 5.75, 0.64,
-             "Approve filing now; retain full-scale occupant-risk validation as the commercial release gate.",
-             12.2, WHITE, True, margin=0)
-    add_source(slide, 0.80, 6.44, 11.60,
-               "Recommendation based on inventor-supplied evidence and inventor-confirmed pre-filing status as of 13 Aug 2026. No legal, safety-certification or investment assurance is implied.", True)
+    add_table(slide, 0.72, 1.36, 7.35, 3.72, conclusion_rows,
+              [0.55, 4.15, 2.25], font_size=8.7, first_col_left=True,
+              highlight_rows={2: LIGHT_ORANGE, 3: LIGHT_CYAN, 4: LIGHT_RED})
+    decision_rows = [
+        ["IPR decision requested", "Purpose"],
+        ["Approve patent filing", "Authorize professional search, drafting and filing"],
+        ["Maintain confidentiality", "Coordinate manuscript/public release after filing"],
+        ["Endorse staged validation", "Replicates, debris metrics, FE and full-scale crash"],
+        ["Enable controlled transfer", "Engage CRRI/NHAI/precast partners under IP controls"],
+    ]
+    add_table(slide, 8.34, 1.36, 4.25, 3.72, decision_rows,
+              [1.62, 2.38], font_size=8.4, first_col_left=True,
+              highlight_rows={1: LIGHT_BLUE})
+    add_rect(slide, 0.80, 5.42, 11.72, 0.72, LIGHT_BLUE, NAVY, radius=False, line_width=0.9)
+    add_text(slide, 1.05, 5.60, 11.22, 0.38,
+             "Recommendation: approve protection of the integrated material–mechanism–barrier platform; retain full-scale occupant-risk validation as the commercial release gate.",
+             10.8, NAVY, True, FONT_HEAD, align=PP_ALIGN.CENTER, margin=0)
+    add_rect(slide, 0.80, 6.27, 11.72, 0.35, WHITE, RED, radius=False, line_width=0.6)
+    add_text(slide, 1.02, 6.35, 11.28, 0.19,
+             "Technical assessment only: patentability, legal claim scope and safety certification require specialist review.",
+             8.3, RED, True, margin=0)
+    add_source(slide, 0.80, 6.68, 11.60,
+               "Recommendation based on inventor-supplied evidence and inventor-confirmed pre-filing status as of 14 Aug 2026.")
     add_notes(slide, """
 CLOSE — approximately 60 seconds
 
@@ -1317,7 +1338,7 @@ def slide_references_1(prs, internal):
     ]
     for col, refs in enumerate([refs_left, refs_right]):
         x = 0.73 if col == 0 else 6.75
-        add_rect(slide, x, 1.30, 5.82, 5.62, WHITE, GRID, radius=True)
+        add_rect(slide, x, 1.30, 5.82, 5.62, WHITE, GRID, radius=False, line_width=0.6)
         y = 1.55
         for ref in refs:
             h = 0.76 if len(ref) < 180 else 0.92
@@ -1356,7 +1377,7 @@ def slide_references_2(prs, internal):
     ]
     for col, refs in enumerate([refs_left, refs_right]):
         x = 0.73 if col == 0 else 6.75
-        add_rect(slide, x, 1.30, 5.82, 5.62, WHITE, GRID, radius=True)
+        add_rect(slide, x, 1.30, 5.82, 5.62, WHITE, GRID, radius=False, line_width=0.6)
         y = 1.52
         for ref in refs:
             h = 0.72 if len(ref) < 200 else 0.82
@@ -1376,8 +1397,8 @@ def build_deck(internal: bool, output: Path) -> None:
     mode = "internal confidential" if internal else "external redacted"
     prs = base_prs(
         "Novel Concrete Composition for Impact Energy Dissipating Crash Barriers",
-        f"Editable {mode} patent-value presentation with experimental evidence and references",
-        "Generated from inventor-supplied documents. Claims and certification statements are evidence-qualified."
+        f"Editable academic {mode} IPR presentation with experimental evidence and references",
+        "Academic research presentation generated from inventor-supplied documents; claims and certification statements are evidence-qualified."
     )
     title_slide(prs, internal)
     slide_executive(prs, internal)
@@ -1409,7 +1430,7 @@ def write_workbook(path: Path) -> None:
     ws.append(["Source", "Inventor-supplied manuscript/disclosure unless otherwise stated"])
     ws.append(["Caveat", "Values transcribed from supplied documents; no independent raw-data audit. Extra-water protocol omitted pending correction; density basis unresolved."])
     ws.append(["Patent status", "Not yet filed; presentation prepared for IIT Bhubaneswar IPR committee pre-filing evaluation and approval."])
-    ws.append(["Generated", "13 August 2026"])
+    ws.append(["Generated", "14 August 2026"])
 
     ws = wb.create_sheet("Global context")
     ws.append(["Metric", "Value", "Unit", "Year", "Source"])

@@ -3,10 +3,10 @@
 ## Files
 
 - **`IITBBS_Impact_Dissipating_Crash_Barrier_Internal_Confidential.pptx`**  
-  Detailed internal IP-evaluation deck. Includes the tested formulation table (except the disputed extra-water quantity), patent evidence map, risks, and speaker notes.
+  Detailed academic pre-filing IPR-evaluation deck. Uses a restrained research theme and includes the tested formulation table (except the disputed extra-water quantity), methods, quantitative evidence, patent-support matrix, research gaps, references, and speaker notes.
 
 - **`IITBBS_Impact_Dissipating_Crash_Barrier_External_Redacted.pptx`**  
-  Redacted technology-overview deck. Exact constituent dosages, material identities in mechanism graphics, moisture-conditioning details, and claim fallbacks are withheld. Distribution still requires IIT Bhubaneswar IP approval.
+  Academic redacted technology-overview deck with the same research-oriented theme. Exact constituent dosages, material identities in mechanism graphics, moisture-conditioning details, and claim fallbacks are withheld. Distribution still requires IIT Bhubaneswar IPR approval.
 
 - **`IITBBS_Crash_Barrier_Presentation_Data.xlsx`**  
   Editable data tables, calculated metrics, global-context data, formulation data for internal use, and a figure-source register.
@@ -22,7 +22,7 @@
 ## Evidence and disclosure boundaries
 
 - The user approved the five supplied DOCX files as the authoritative source set because the expected PDF was not present.
-- The inventors confirmed on **13 August 2026** that the patent has **not yet been filed**. The internal deck is specifically framed for the IIT Bhubaneswar IPR committee’s pre-filing evaluation and approval.
+- The inventors confirmed on **14 August 2026** that the patent has **not yet been filed**. The internal deck is specifically framed for the IIT Bhubaneswar IPR committee’s pre-filing evaluation and approval.
 - The related manuscript is recorded as submitted on **18 July 2026**; submission/publication timing should be coordinated with the IPR section and patent counsel.
 - The source conflicts on whether extra SFA-compensation water was added. The exact extra-water value is therefore omitted.
 - The source alternates between “wet density” and “dry density”; the decks use **reported density** pending correction.
