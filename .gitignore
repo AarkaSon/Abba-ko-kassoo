@@ -1,0 +1,15 @@
+# Local build and analysis artifacts
+.venv/
+.build_patent_deck/
+.tmp*/
+image-search/
+__pycache__/
+*.pyc
+
+# Office lock files
+~$*.docx
+~$*.pptx
+~$*.xlsx
+
+# Local preview renders
+.build/
