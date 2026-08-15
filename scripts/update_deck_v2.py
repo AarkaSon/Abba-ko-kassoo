@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import copy
 import re
+import sys
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -29,6 +30,8 @@ from pptx.enum.chart import XL_CHART_TYPE, XL_DATA_LABEL_POSITION
 from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
 from pptx.enum.text import MSO_VERTICAL_ANCHOR, PP_ALIGN
 from pptx.util import Inches, Pt
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 ROOT = Path(__file__).resolve().parents[1]
 DECK = ROOT / "IITBBS_Impact_Dissipating_Crash_Barrier_Internal_Confidential.pptx"
@@ -650,7 +653,15 @@ def main():
 
     renumber_footers(prs)
     prs.save(str(DECK))
-    print(f"updated: {DECK}  ({len(prs.slides)} slides)")
+
+    # python-pptx re-serialises PowerPoint Morph transitions with an invalid
+    # empty default namespace on mc:Fallback, which makes PowerPoint refuse to
+    # open the file. Repair the saved package before handing it over.
+    from repair_pptx import repair, verify
+    stats = repair(DECK)
+    verify(DECK)
+    print(f"updated: {DECK}  ({len(prs.slides)} slides); "
+          f"repaired {stats['fallback']} mc:Fallback, {stats['notes']} notes pages")
 
 
 if __name__ == "__main__":
