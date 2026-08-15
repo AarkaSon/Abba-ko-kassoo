@@ -537,7 +537,11 @@ def rebuild_methods_slide(prs, index):
         keep = (name in keep_prefixes) or "Pentagon" in name
         if not keep:
             shape._element.getparent().remove(shape._element)
+    return rebuild_methods_body(slide)
 
+
+def rebuild_methods_body(slide):
+    """Draw the methods-overview content onto an (already cleared) slide."""
     steps = [
         dict(n="1", title="MATERIALS", img=PANELS / "raw.png", key="m_raw",
              body="XRF oxide analysis; specific gravity and absorption of sintered fly-ash aggregate; hooked-end fibre geometry."),
