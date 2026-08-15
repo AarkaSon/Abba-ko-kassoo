@@ -1,6 +1,7 @@
 # Local build and analysis artifacts
 .venv/
 .build_patent_deck/
+.build_patent_revision/
 .tmp*/
 image-search/
 __pycache__/

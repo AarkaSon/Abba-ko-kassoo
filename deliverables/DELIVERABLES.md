@@ -2,6 +2,12 @@
 
 ## Files
 
+- **`IITBBS_Impact_Dissipating_Crash_Barrier_Patent_Approval_Final.pptx`**  
+  Final 22-slide patent-approval presentation derived from the user-edited PPTX. It includes the new background, AI-generated title visual, Tahoma typography, standards/reference lines, impact-count error bars, experimental claim window, comparative claims, transitions, pulsing research-gap emphasis, consolidated published references, and expanded conclusion notes.
+
+- **`PATENT_DECK_QA_NOTES.md`**  
+  Cross-check record covering geopolymer terminology, density basis, extra-water inconsistency, impact standard deviations, standards limitations, barrier replication and claim boundaries.
+
 - **`IITBBS_Impact_Dissipating_Crash_Barrier_Internal_Confidential.pptx`**  
   Detailed academic pre-filing IPR-evaluation deck. Uses a restrained research theme and includes the tested formulation table (except the disputed extra-water quantity), methods, quantitative evidence, patent-support matrix, research gaps, references, and speaker notes.
 
